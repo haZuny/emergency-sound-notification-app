@@ -1,0 +1,36 @@
+categoty: count-per-category
+
+Air-horn: 312 
+
+Ambulance-(siren): 523 
+
+Bicycle: 1896 
+
+Bus: 3616 
+
+Car: 25076 
+
+Car-alarm: 179 
+
+Car-passing-by: 3597 
+
+Civil-defense-siren: 1408 
+
+Fire-engine: 2287 
+
+Motorcycle: 3161 
+
+Police-car-(siren): 2363 
+
+Reversing-beeps: 244 
+
+Screaming: 635 
+
+Skateboard: 1515 
+
+Train: 2074 
+
+Train-horn: 344 
+
+Truck: 6884 
+
