@@ -28,20 +28,27 @@ for i, line in enumerate(reader):
     #end = float(label[2])
     category = line[7]
         
-    
-    # open wav file
-    try:
-        w = w = wave.open(data_file_route + name, 'r')
-    except:
-        print("[Error] Wave file open error: "+name+" can not open!")
-        continue
-    
     # Counting by Category
     try:
         category_cnt[category] += 1
     except:
         category_cnt[category] = 0
-    '''
+        
+    saveFileName = save_route + category + '-' + str(category_cnt[category]) + '-urban.wav'
+    ''' 
+    # open wav file
+    try:
+        w = w = wave.open(data_file_route + name, 'r')
+    except:
+        #print("[Error] Wave file open error: "+name+" can not open!")
+        try:
+            os.rename(data_file_route + name, saveFileName)
+        except:
+            print('[Error] cna not open '+name)
+        #continue
+    
+    
+    
     frameRate = w.getframerate()
     buf = w.readframes(w.getnframes())
     amp = np.frombuffer(buf, dtype='int16')
@@ -51,7 +58,7 @@ for i, line in enumerate(reader):
     cut_amp = amp
     
     # save
-    saveFileName = save_route + category + '-' + str(category_cnt[category]) + '-urban.wav'
+    
     save_wave = wave.Wave_write(saveFileName)
     save_wave.setparams(w.getparams())
     save_wave.writeframes(array.array('h', cut_amp).tobytes())
