@@ -1,22 +1,22 @@
 categoty: count-per-category
 
-air_conditioner: 999 
+air_conditioner: 578 
 
-car_horn: 428 
+car_horn: 341 
 
-children_playing: 999 
+children_playing: 611 
 
-dog_bark: 999 
+dog_bark: 732 
 
-drilling: 999 
+drilling: 719 
 
-engine_idling: 999 
+engine_idling: 569 
 
-gun_shot: 373 
+gun_shot: 264 
 
-jackhammer: 999 
+jackhammer: 563 
 
-siren: 928 
+siren: 729 
 
-street_music: 999 
+street_music: 685 
 

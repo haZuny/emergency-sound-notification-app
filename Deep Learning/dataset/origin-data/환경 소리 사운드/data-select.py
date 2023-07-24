@@ -27,21 +27,21 @@ for i, line in enumerate(reader):
     #start = float(label[1])
     #end = float(label[2])
     category = line[7]
-        
-    
-    # open wav file
-    try:
-        w = w = wave.open(data_file_route + name, 'r')
-    except:
-        print("[Error] Wave file open error: "+name+" can not open!")
-        continue
     
     # Counting by Category
     try:
         category_cnt[category] += 1
     except:
         category_cnt[category] = 0
-    '''
+    
+    
+    # open wav file
+    try:
+        w = w = wave.open(data_file_route + name, 'r')
+    except:
+        print("[Error] Wave file open error: name can not open!")
+        continue
+    
     frameRate = w.getframerate()
     buf = w.readframes(w.getnframes())
     amp = np.frombuffer(buf, dtype='int16')
@@ -61,7 +61,7 @@ for i, line in enumerate(reader):
         percent = i * 100 // lineSize
         print(f'[{i}/{lineSize}]\t\t' + '='*percent + '-'*(100-percent))
         printMaker += 1
-    '''
+    
 f.close()
 
 
