@@ -1,19 +1,12 @@
 ## Summary
 
-- Air-horn: 45 
-- Ambulance-(siren): 32 
-- Bicycle: 37 
-- Bus: 31  
-- Car: 64  
-- Car-alarm: 35  
-- Car-passing-by: 34 
-- Civil-defense-siren: 30 
-- Fire-engine: 34 
-- Motorcycle: 30 
-- Police-car-(siren): 35 
-- Reversing-beeps: 32 
-- Screaming: 39 
-- Skateboard: 32 
-- Train: 52 
-- Train-horn: 48 
-- Truck: 61 
+- Air_conditioner: 999 
+- Car_horn: 428 
+- Children_playing: 999 
+- Dog_bark: 999 
+- Drilling: 999 
+- Engine_idling: 999 
+- Gun_shot: 373 
+- Jackhammer: 999 
+- Siren: 928 
+- Street_music: 999 
