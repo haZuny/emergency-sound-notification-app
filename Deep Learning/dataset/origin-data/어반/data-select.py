@@ -35,7 +35,7 @@ for i, line in enumerate(reader):
         category_cnt[category] = 0
         
     saveFileName = save_route + category + '-' + str(category_cnt[category]) + '-urban.wav'
-    ''' 
+    
     # open wav file
     try:
         w = w = wave.open(data_file_route + name, 'r')
@@ -68,7 +68,7 @@ for i, line in enumerate(reader):
         percent = i * 100 // lineSize
         print(f'[{i}/{lineSize}]\t\t' + '='*percent + '-'*(100-percent))
         printMaker += 1
-    '''
+    
 f.close()
 
 
