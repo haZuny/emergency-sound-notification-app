@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.emergency_notifier_app'
+    namespace 'com.example.emergency_norifier_app'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.emergency_notifier_app"
+        applicationId "com.example.emergency_norifier_app"
         minSdk 24
         targetSdk 33
         versionCode 1

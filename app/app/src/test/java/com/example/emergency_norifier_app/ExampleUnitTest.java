@@ -1,4 +1,4 @@
-package com.example.emergency_notifier_app;
+package com.example.emergency_norifier_app;
 
 import org.junit.Test;
 
