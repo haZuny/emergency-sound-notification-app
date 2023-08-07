@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 
 
 # audio wav open
-audio, sample_rate = librosa.load('sample2.wav')
+audio, sample_rate = librosa.load('sample1.wav')
 audio_len = len(audio)//sample_rate
 
 pred_size = 4 # 예측 시간
