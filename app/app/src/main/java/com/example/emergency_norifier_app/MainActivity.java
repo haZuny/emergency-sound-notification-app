@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // audioRecord 객체에서 음성 데이터 가져옴.
                 int result = audioRecord.read(buffer, BUFFER_SIZE_RECORDING);
-                Log.d("sound recording", String.valueOf(buffer.array()[500]));
+                Log.d("sound recording", String.valueOf(buffer.array().length));
                 if (result < 0) {
                     throw new RuntimeException("Reading of audio buffer failed: " +
                             getBufferReadFailureReason(result));
@@ -143,10 +143,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-
-
-
-
