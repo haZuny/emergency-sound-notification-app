@@ -1,4 +1,4 @@
-package com.example.emergency_norifier_app;
+package com.example.emergency_sound_detector;
 
 import org.junit.Test;
 
