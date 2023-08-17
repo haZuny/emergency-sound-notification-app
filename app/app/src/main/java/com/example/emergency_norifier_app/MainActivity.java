@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     // 음성을 녹음하는 객체. 음성을 디지털 데이터로 변환하는.
     private AudioRecord audioRecord = null;
     // 일반 스레드, 데이터를 계속 받아와서 파일에 저장하는
-    private Thread recordingThread = null;a
+    private Thread recordingThread = null;
 
 
     @Override
