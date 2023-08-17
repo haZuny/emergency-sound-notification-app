@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     boolean isPlaying = false;
 
     private int audioSource = MediaRecorder.AudioSource.MIC;
-    private int sampleRate = 5000;
+    private int sampleRate = 44100;
     private int channelCount = AudioFormat.CHANNEL_IN_MONO;
     private int audioFormat = AudioFormat.ENCODING_PCM_FLOAT;
     private int bufSize = AudioRecord.getMinBufferSize(sampleRate, channelCount, audioFormat);
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     public AudioRecord audioRecorder = null;
 
     public Thread recordThread = null;
+
+
+    int testsize = 0;
 
 
     @Override
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         button_onoff.setText("Start");
         button_playing.setText("Play");
 
+
+
         // audio recorder
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -58,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 while (running_state) {
                     int ret = audioRecorder.read(buf, 0, bufSize, AudioRecord.READ_NON_BLOCKING);
                     if (ret > 0) {
-                        Log.d("버퍼", Integer.toString(ret) + ", " + Arrays.toString(buf));
+                        testsize += ret;
+                        Log.d("버퍼", Integer.toString(testsize) + ", " + Integer.toString(ret) + ", " + Arrays.toString(buf));
                     }
 //                    try {
 //                        Thread.sleep(1);
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 running_state = true;
                 button_onoff.setText("Stop");
                 audioRecorder.startRecording();
+                testsize = 0;
                 recordThread.run();
             }
         });
