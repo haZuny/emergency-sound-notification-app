@@ -45,7 +45,7 @@ for i in data_idx:
         #f, t, Zxx = sound_processing.wav_to_stft(shuffle_path+str(carHorn_data_size - i -2)+'.wav')
         audio, sample_rate = librosa.load(shuffle_path+str(carHorn_data_size - i -2)+'.wav')
         mfcc = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=64)
-    mfcc = np.resize(mfcc, (64,173,1))
+    mfcc = np.resize(mfcc, (64,44,1))
     X.append(mfcc)
         
     
@@ -59,7 +59,7 @@ print(X.shape, Y.shape)
 #%% 모델 정의
 
 model = models.Sequential()
-model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(64, 173, 1)))
+model.add(layers.Conv2D(64, (3,3), activation='relu', input_shape=(64, 44, 1)))
 model.add(layers.MaxPool2D(2,2))
 model.add(layers.Conv2D(64, (3,3), activation='relu'))
 model.add(layers.MaxPool2D(2,2))
@@ -82,7 +82,7 @@ X_val = X[500:]
 Y_train = Y[:500]
 Y_val= Y[500:]
 
-trained = model.fit(X_train, Y_train, epochs=15, validation_data=(X_val, Y_val))
+trained = model.fit(X_train, Y_train, epochs=11, validation_data=(X_val, Y_val))
 
 
 # 모델 저장

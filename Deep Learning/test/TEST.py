@@ -15,7 +15,7 @@ from tensorflow.keras.models import load_model
 audio, sample_rate = librosa.load('test.wav')
 audio_len = len(audio)//sample_rate
 
-pred_size = 4 # 예측 시간
+pred_size = 1 # 예측 시간
 search_step = 0.5 # 몇초에 한번 검사할지
 
 max_audio_value = sorted(abs(audio))[int(len(audio)*0.9)]
@@ -23,7 +23,6 @@ max_audio_value = sorted(abs(audio))[int(len(audio)*0.9)]
 search_time = 0
 while search_time+pred_size < audio_len:
     start, end = map(int, (search_time*sample_rate, (search_time+pred_size)*sample_rate))
-    print(start, end)
     buf = audio[start:end]
     
     # 시각화
@@ -32,7 +31,7 @@ while search_time+pred_size < audio_len:
     # 소리 전처리
     mfcc = librosa.feature.mfcc(y=buf, sr=sample_rate, n_mfcc=64)
     print(mfcc.shape)
-    x = np.resize(mfcc, (1, 64, 256, 1))
+    x = np.resize(mfcc, (1, 64, 44, 1))
     
     # 예측
     model = load_model('car_horn.h5')
