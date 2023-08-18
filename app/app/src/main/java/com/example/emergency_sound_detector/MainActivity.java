@@ -19,22 +19,21 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    public boolean running_state = false;
-    boolean isPlaying = false;
 
+    /**
+     * About Audio Recording
+     */
+    // recording parm
     private int audioSource = MediaRecorder.AudioSource.MIC;
     private int sampleRate = 44100;
     private int channelCount = AudioFormat.CHANNEL_IN_MONO;
     private int audioFormat = AudioFormat.ENCODING_PCM_FLOAT;
     private int bufSize = AudioRecord.getMinBufferSize(sampleRate, channelCount, audioFormat);
 
-    public float[] buf = new float[bufSize];
+    // recording obj
     public AudioRecord audioRecorder = null;
-
+    // recording thread
     public Thread recordThread = null;
-
-
-    int testsize = 0;
 
 
     @Override
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         button_playing.setText("Play");
 
 
-
         // audio recorder
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -60,17 +58,12 @@ public class MainActivity extends AppCompatActivity {
         recordThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (running_state) {
-                    int ret = audioRecorder.read(buf, 0, bufSize, AudioRecord.READ_NON_BLOCKING);
+                while (GlobalObj.get_isRecording()) {
+                    Log.d("asdf", "asdfasdfasdf");
+                    int ret = audioRecorder.read(GlobalObj.floatArr_recordingBuffer, 0, 100, AudioRecord.READ_NON_BLOCKING);
                     if (ret > 0) {
-                        testsize += ret;
-                        Log.d("버퍼", Integer.toString(testsize) + ", " + Integer.toString(ret) + ", " + Arrays.toString(buf));
+//                        Log.d("버퍼", Integer.toString(testsize) + ", " + Integer.toString(ret) + ", " + Arrays.toString(buf));
                     }
-//                    try {
-//                        Thread.sleep(1);
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
                 }
                 return;
             }
@@ -82,33 +75,32 @@ public class MainActivity extends AppCompatActivity {
             Log.d("action", "onoff 버튼 누름");
 
             // Start->Stop
-            if (running_state) {
-                running_state = false;
+            if (GlobalObj.get_isRecording()) {
+                GlobalObj.setBool_isRecording(false);
                 button_onoff.setText("Start");
                 audioRecorder.stop();
                 audioRecorder.release();
             }
             // Stop->Start
             else {
-                running_state = true;
+                GlobalObj.setBool_isRecording(true);
                 button_onoff.setText("Stop");
                 audioRecorder.startRecording();
-                testsize = 0;
-                recordThread.run();
+                recordThread.start();
             }
         });
 
         button_playing.setOnClickListener(v -> {
-            // play -> stop
-            if (isPlaying) {
-                isPlaying = false;
-                button_playing.setText("Play");
-            }
-            // stop -> play
-            else {
-                isPlaying = true;
-                button_playing.setText("Stop");
-            }
+//            // play -> stop
+//            if (isPlaying) {
+//                isPlaying = false;
+//                button_playing.setText("Play");
+//            }
+//            // stop -> play
+//            else {
+//                isPlaying = true;
+//                button_playing.setText("Stop");
+//            }
         });
     }
 }
