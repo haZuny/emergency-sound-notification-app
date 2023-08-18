@@ -17,11 +17,11 @@ public class CustomView_ViewAudio extends View {
     /**
      * Drawing buffer
      * 한 화면은 총 5초간의 오디오 정보를 표시합니다.
-     * 1초에 100개의 sample rate로 그립니다.
-     * buffer size = 100 * 5 = 500
+     * 1초에 50 sample rate로 그립니다.
+     * buffer size = 50 * 5 = 250
      * 화면은 오른쪽부터 갱신됩니다.
      */
-    private int bufSize = 500;
+    private int bufSize = 250;
     ArrayList<Float> drawingBuffer = null;
 
     // Canvas info

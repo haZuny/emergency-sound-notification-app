@@ -8,7 +8,7 @@ public class RecordingThread extends Thread {
     AudioRecord audioRecordingObj = null;
     // Custom View _ View Audio
     CustomView_ViewAudio customView_viewAudio = null;
-    int CustomViewStep = 4;
+    int CustomViewStep = 9;
 
     public RecordingThread(AudioRecord audioRecorderObj, CustomView_ViewAudio customVIew) {
         this.audioRecordingObj = audioRecorderObj;
