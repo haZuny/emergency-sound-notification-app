@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
      */
     // recording parm
     private int audioSource = MediaRecorder.AudioSource.MIC;
-    private int sampleRate = 44100;
+    private int sampleRate = GlobalObj.sampleRate;
     private int channelCount = AudioFormat.CHANNEL_IN_MONO;
     private int audioFormat = AudioFormat.ENCODING_PCM_FLOAT;
     private int bufSize = AudioRecord.getMinBufferSize(sampleRate, channelCount, audioFormat);
