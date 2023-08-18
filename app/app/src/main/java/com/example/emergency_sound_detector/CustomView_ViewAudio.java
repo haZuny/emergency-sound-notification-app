@@ -66,6 +66,5 @@ public class CustomView_ViewAudio extends View {
             float height = drawingBuffer.get(i) * height_size/2;
             canvas.drawRect(i*width_size/bufSize, y_mid - height, i*width_size/bufSize + width, y_mid + height, paint);
         }
-        Log.d("Draw", Integer.toString(width_size) + ", " + Integer.toString(height_size));
     }
 }
