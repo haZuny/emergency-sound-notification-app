@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private int bufSize = AudioRecord.getMinBufferSize(sampleRate, channelCount, audioFormat);
 
     // recording obj
-    public AudioRecord audioRecorder = null;
+    public AudioRecord audioRecordObj = null;
     // recording thread
-    public Thread recordThread = null;
+    public RecordingThread audioRecordingThread = null;
 
 
     @Override
@@ -54,39 +54,34 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        audioRecorder = new AudioRecord(audioSource, sampleRate, channelCount, audioFormat, bufSize);
-        recordThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (GlobalObj.get_isRecording()) {
-                    Log.d("asdf", "asdfasdfasdf");
-                    int ret = audioRecorder.read(GlobalObj.floatArr_recordingBuffer, 0, 100, AudioRecord.READ_NON_BLOCKING);
-                    if (ret > 0) {
-//                        Log.d("버퍼", Integer.toString(testsize) + ", " + Integer.toString(ret) + ", " + Arrays.toString(buf));
-                    }
-                }
-                return;
-            }
-        });
 
 
         // 동작 정의
         button_onoff.setOnClickListener(v -> {
-            Log.d("action", "onoff 버튼 누름");
 
+            Log.d("ButtonClick", "Clicked Start/Stop Button");
             // Start->Stop
             if (GlobalObj.get_isRecording()) {
+                Log.d("Action", "Start Recording");
                 GlobalObj.setBool_isRecording(false);
                 button_onoff.setText("Start");
-                audioRecorder.stop();
-                audioRecorder.release();
+                // release thread
+                audioRecordingThread = null;
+                // release audioRecord
+                audioRecordObj.stop();
+                audioRecordObj.release();
             }
             // Stop->Start
             else {
+                Log.d("Action", "End Recording");
                 GlobalObj.setBool_isRecording(true);
                 button_onoff.setText("Stop");
-                audioRecorder.startRecording();
-                recordThread.start();
+                // start audioRecord
+                audioRecordObj = new AudioRecord(audioSource, sampleRate, channelCount, audioFormat, bufSize);
+                audioRecordObj.startRecording();
+                // start threading
+                audioRecordingThread = new RecordingThread(audioRecordObj);
+                audioRecordingThread.start();
             }
         });
 
