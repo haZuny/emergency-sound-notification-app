@@ -12,6 +12,11 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <com.example.emergency_sound_detector.CustomView_ViewAudio
+            android:id="@+id/custom_viewAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="227dp" />
+
         <Button
             android:id="@+id/button_onoff"
             android:layout_width="wrap_content"
@@ -23,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

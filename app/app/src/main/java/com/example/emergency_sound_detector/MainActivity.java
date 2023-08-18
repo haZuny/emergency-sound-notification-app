@@ -41,9 +41,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // components
+        /**
+         * Components
+         */
+        // buttons
         Button button_onoff = (Button) findViewById(R.id.button_onoff);
         Button button_playing = (Button) findViewById(R.id.button_play);
+        // custom view
+        CustomView_ViewAudio customView_viewAudio = (CustomView_ViewAudio) findViewById(R.id.custom_viewAudio);
 
         // 초기화
         button_onoff.setText("Start");
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 audioRecordObj = new AudioRecord(audioSource, sampleRate, channelCount, audioFormat, bufSize);
                 audioRecordObj.startRecording();
                 // start threading
-                audioRecordingThread = new RecordingThread(audioRecordObj);
+                audioRecordingThread = new RecordingThread(audioRecordObj, customView_viewAudio);
                 audioRecordingThread.start();
             }
         });
