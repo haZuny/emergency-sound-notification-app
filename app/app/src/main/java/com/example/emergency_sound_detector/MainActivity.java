@@ -6,16 +6,10 @@ import androidx.core.app.ActivityCompat;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     // recording obj
     public AudioRecord audioRecordObj = null;
     // recording thread
-    public RecordingThread audioRecordingThread = null;
+    public Thread_RecordingThread audioRecordingThread = null;
 
 
     @Override
@@ -85,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 audioRecordObj = new AudioRecord(audioSource, sampleRate, channelCount, audioFormat, bufSize);
                 audioRecordObj.startRecording();
                 // start threading
-                audioRecordingThread = new RecordingThread(audioRecordObj, customView_viewAudio);
+                audioRecordingThread = new Thread_RecordingThread(audioRecordObj, customView_viewAudio);
                 audioRecordingThread.start();
             }
         });
