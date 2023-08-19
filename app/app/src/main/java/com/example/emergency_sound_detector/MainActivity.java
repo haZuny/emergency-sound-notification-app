@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         /**
          * Components
          */
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         button_playing.setText("Play");
 
 
-        // audio recorder
+        // audio permission check
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
         }

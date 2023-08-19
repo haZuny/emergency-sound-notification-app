@@ -28,9 +28,11 @@ public class GlobalObj {
 
 class DeepLearningBuffer {
     int seq = 0;
-    int bufSize = GlobalObj.sampleRate * 4;
+    static int time_term = 1;  // 1초 버퍼 크기로 검사
+    double detect_step = 0.25;  // 0.25초마다 검사
+    int bufSize = GlobalObj.sampleRate * time_term;
 
-    public static float[] dlBuffer = new float[GlobalObj.sampleRate * 4];
+    public static float[] dlBuffer = new float[GlobalObj.sampleRate * time_term];
 
     public float[] getDlBuffer(){
         return dlBuffer;
@@ -50,8 +52,7 @@ class DeepLearningBuffer {
         seq += len;
 
         // 0.5초마다 검사
-        // 44100 * 0.5 = 22050
-        if (seq >= (int)GlobalObj.sampleRate *0.5) {
+        if (seq >= (int)GlobalObj.sampleRate * detect_step) {
             TFLite.predict();
             seq = 0;
         }
