@@ -12,8 +12,8 @@ X = []
 Y = []
 
 # 데이터 로드
-carHorn_data_size = 273
-other_data_size = 322
+carHorn_data_size = 874
+other_data_size = 908
 
 # positive와 negative 순서 정의
 data_idx = []
@@ -24,8 +24,8 @@ for i in range(1, other_data_size+1):
     
 random.shuffle(data_idx)
 
-carHorn_path = 'D:/hajun/final/emergency-sound-notification-app/Deep Learning/dataset/training-data/car_horn/'
-other_path = 'D:/hajun/final/emergency-sound-notification-app/Deep Learning/dataset/training-data/other/'
+carHorn_path = 'D:/hajun/final/emergency-sound-notification-app/Deep Learning/dataset/training-data/car_horn_cut/'
+other_path = 'D:/hajun/final/emergency-sound-notification-app/Deep Learning/dataset/training-data/other_cut/'
 shuffle_path = 'D:/hajun/final/emergency-sound-notification-app/Deep Learning/dataset/training-data/shuffle/'
 
 
@@ -59,17 +59,14 @@ print(X.shape, Y.shape)
 #%% 모델 정의
 
 model = models.Sequential()
-model.add(layers.Conv2D(64, (3,3), activation='relu', input_shape=(64, 44, 1)))
+model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(64, 44, 1)))
 model.add(layers.MaxPool2D(2,2))
 model.add(layers.Conv2D(64, (3,3), activation='relu'))
 model.add(layers.MaxPool2D(2,2))
-model.add(layers.Conv2D(128, (3,3), activation='relu'))
-model.add(layers.MaxPool2D(2,2))
-model.add(layers.Conv2D(64, (3,3), activation='relu'))
-model.add(layers.Dropout(0.3,))
+model.add(layers.Conv2D(32, (3,3), activation='relu'))
+model.add(layers.Dropout(0.2,))
 
 model.add(layers.Flatten())
-model.add(layers.Dense(32, activation='relu'))
 model.add(layers.Dense(16, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 
@@ -82,7 +79,7 @@ X_val = X[500:]
 Y_train = Y[:500]
 Y_val= Y[500:]
 
-trained = model.fit(X_train, Y_train, epochs=11, validation_data=(X_val, Y_val))
+trained = model.fit(X_train, Y_train, epochs=5, validation_data=(X_val, Y_val))
 
 
 # 모델 저장
