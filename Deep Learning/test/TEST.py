@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 
 
 # audio wav open
-audio, sample_rate = librosa.load('test2.wav')
+audio, sample_rate = librosa.load('test3.wav')
 audio_len = len(audio)//sample_rate
 
 print(sample_rate)
