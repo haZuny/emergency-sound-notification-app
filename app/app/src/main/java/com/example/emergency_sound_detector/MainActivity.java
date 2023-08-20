@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Tflite model init
+        TFLite.initTfliteInterpreter(MainActivity.this, "car_horn.tflite");
 
         /**
          * Components
