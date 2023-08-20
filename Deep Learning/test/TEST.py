@@ -17,7 +17,7 @@ audio_len = len(audio)//sample_rate
 
 # loat model
 model = load_model('car_horn.h5')
-print(model)
+print(model.)
 
 '''
 
