@@ -19,7 +19,7 @@ public class TFLite {
     private static JLibrosa jlibrosa = new JLibrosa();
     private static Interpreter interpreter = null;
 
-    private  static float[][][][] input = new float[1][64][44][1];
+    private static float[][][][] input = new float[1][64][44][1];
     private static float[][] output = new float[1][1];
 
 
@@ -28,9 +28,9 @@ public class TFLite {
         // MFCC
         float[][] mfcc = jlibrosa.generateMFCCFeatures(GlobalObj.deeplearningBuffer.getDlBuffer(), GlobalObj.sampleRate, 64);
         // input reshape (64, 44) -> (1, 64, 44, 1)
-        for (int i = 0; i < mfcc.length; i++){
+        for (int i = 0; i < mfcc.length; i++) {
             float[][] buf = new float[44][1];
-            for(int j = 0; j < mfcc[0].length; j++){
+            for (int j = 0; j < mfcc[0].length; j++) {
                 buf[j][0] = mfcc[i][j];
             }
             input[0][i] = buf;
@@ -42,16 +42,15 @@ public class TFLite {
     }
 
     // init tflite interpreter
-    public static void initTfliteInterpreter(Activity activity, String modelPath){
+    public static void initTfliteInterpreter(Activity activity, String modelPath) {
         interpreter = getTfliteInterpreter(activity, modelPath);
     }
 
     // Get Interpreter
-    private static Interpreter getTfliteInterpreter(Activity activity, String modelPath){
+    private static Interpreter getTfliteInterpreter(Activity activity, String modelPath) {
         try {
             return new Interpreter(loadModelFile(activity, modelPath));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
