@@ -5,9 +5,10 @@ from tensorflow.keras import layers, models
 import matplotlib.pyplot as plt
 import librosa
 
+from tensorflow.keras.callbacks import EarlyStopping
+
 
 # 데이터 로드
-arrSize = 1000
 X = []
 Y = []
 
@@ -59,9 +60,11 @@ print(X.shape, Y.shape)
 #%% 모델 정의
 
 model = models.Sequential()
-model.add(layers.Conv2D(32, (3,3), activation='relu', input_shape=(64, 44, 1)))
+model.add(layers.Conv2D(64, (3,3), activation='relu', input_shape=(64, 44, 1)))
 model.add(layers.MaxPool2D(2,2))
-model.add(layers.Conv2D(64, (3,3), activation='relu'))
+model.add(layers.Conv2D(64, (3,3), activation='relu', input_shape=(64, 44, 1)))
+model.add(layers.MaxPool2D(2,2))
+model.add(layers.Conv2D(32, (3,3), activation='relu'))
 model.add(layers.MaxPool2D(2,2))
 model.add(layers.Conv2D(32, (3,3), activation='relu'))
 model.add(layers.Dropout(0.2,))
@@ -71,15 +74,16 @@ model.add(layers.Dense(16, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 
 # 컴파일
-model.compile(optimizer='SGD', loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.001), loss='binary_crossentropy', metrics=['accuracy'])
 
 # 학습
-X_train = X[:500]
-X_val = X[500:]
-Y_train = Y[:500]
-Y_val= Y[500:]
+X_train = X[:1200]
+X_val = X[1200:]
+Y_train = Y[:1200]
+Y_val= Y[1200:]
 
-trained = model.fit(X_train, Y_train, epochs=5, validation_data=(X_val, Y_val))
+early_stopping = EarlyStopping(patience=5)
+trained = model.fit(X_train, Y_train, epochs=200, validation_data=(X_val, Y_val), callbacks = [early_stopping])
 
 
 # 모델 저장

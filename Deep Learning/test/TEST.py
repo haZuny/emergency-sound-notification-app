@@ -12,13 +12,17 @@ from tensorflow.keras.models import load_model
 
 
 # audio wav open
-audio, sample_rate = librosa.load('test3.wav')
+audio, sample_rate = librosa.load('test.wav')
 audio_len = len(audio)//sample_rate
 
-print(sample_rate)
+# loat model
+model = load_model('car_horn.h5')
+print(model)
+
+'''
 
 pred_size = 1 # 예측 시간
-search_step = 0.25 # 몇초에 한번 검사할지
+search_step = 0.20 # 몇초에 한번 검사할지
 
 max_audio_value = sorted(abs(audio))[int(len(audio)*0.9)]
 # 검사
@@ -36,8 +40,8 @@ while search_time+pred_size < audio_len:
     x = np.resize(mfcc, (1, 64, 44, 1))
     
     # 예측
-    model = load_model('car_horn.h5')
     pred = model.predict(x)
     if pred[0][0] > 0.5: print('\t\t\t\t경적소리 발생\n\t\t\t\t' ,pred[0][0],)
     
     search_time += search_step
+'''
