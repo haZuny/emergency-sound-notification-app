@@ -10,13 +10,14 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-
-
     /**
      * About Audio Recording
      */
@@ -32,11 +33,18 @@ public class MainActivity extends AppCompatActivity {
     // recording thread
     public Thread_RecordingThread audioRecordingThread = null;
 
+    /**
+     * About layout
+     */
+    static TextView textView_isCarHorn = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Global Obj context init
+        GlobalObj.mainActivity = MainActivity.this;
 
         // Tflite model init
         TFLite.initTfliteInterpreter(MainActivity.this, "car_horn.tflite");
@@ -44,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Components
          */
+        // textView
+        textView_isCarHorn = (TextView) findViewById(R.id.textView_isCarHorn);
         // buttons
         Button button_onoff = (Button) findViewById(R.id.button_onoff);
         Button button_playing = (Button) findViewById(R.id.button_play);
@@ -51,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         CustomView_ViewAudio customView_viewAudio = (CustomView_ViewAudio) findViewById(R.id.custom_viewAudio);
 
         // 초기화
+        textView_isCarHorn.setText("감지 안됨");
         button_onoff.setText("Start");
         button_playing.setText("Play");
 
@@ -85,22 +96,27 @@ public class MainActivity extends AppCompatActivity {
                 audioRecordObj = new AudioRecord(audioSource, sampleRate, channelCount, audioFormat, bufSize);
                 audioRecordObj.startRecording();
                 // start threading
-                audioRecordingThread = new Thread_RecordingThread(audioRecordObj, customView_viewAudio);
+                audioRecordingThread = new Thread_RecordingThread(audioRecordObj, customView_viewAudio, this);
                 audioRecordingThread.start();
             }
         });
 
         button_playing.setOnClickListener(v -> {
-//            // play -> stop
-//            if (isPlaying) {
-//                isPlaying = false;
-//                button_playing.setText("Play");
-//            }
-//            // stop -> play
-//            else {
-//                isPlaying = true;
-//                button_playing.setText("Stop");
-//            }
+        });
+    }
+
+    // state 표시
+    public void changeCarHornState(float predictVal){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (predictVal > 0.5) {
+                    textView_isCarHorn.setText("경적 감지: " + Float.toString(predictVal));
+                } else {
+                    textView_isCarHorn.setText("감지 안됨: " + Float.toString(predictVal));
+                }
+
+            }
         });
     }
 }

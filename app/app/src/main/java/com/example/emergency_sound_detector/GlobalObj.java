@@ -1,10 +1,11 @@
 package com.example.emergency_sound_detector;
 
-import android.util.Log;
-
-import java.util.Arrays;
+import android.content.Context;
 
 public class GlobalObj {
+
+    // Main Context
+    static MainActivity mainActivity = null;
 
     // default param
     static int sampleRate = 22050;
@@ -51,10 +52,6 @@ class DeepLearningBuffer {
 
         seq += len;
 
-        // 0.5초마다 검사
-        if (seq >= (int)GlobalObj.sampleRate * detect_step) {
-            TFLite.predict();
-            seq = 0;
-        }
+
     }
 }

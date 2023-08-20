@@ -36,7 +36,7 @@ public class TFLite {
             input[0][i] = buf;
         }
         interpreter.run(input, output);
-        Log.d("예측", Arrays.toString(output[0]));
+        Log.d("Predict", Arrays.toString(output[0]));
 
         return output[0][0];
     }
