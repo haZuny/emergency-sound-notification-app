@@ -58,14 +58,12 @@ public class MainActivity extends AppCompatActivity {
         textView_isCarHorn = (TextView) findViewById(R.id.textView_isCarHorn);
         // buttons
         Button button_onoff = (Button) findViewById(R.id.button_onoff);
-        Button button_playing = (Button) findViewById(R.id.button_play);
         // custom view
         CustomView_ViewAudio customView_viewAudio = (CustomView_ViewAudio) findViewById(R.id.custom_viewAudio);
 
         // 초기화
         textView_isCarHorn.setText("감지 안됨");
         button_onoff.setText("Start");
-        button_playing.setText("Play");
 
 
         // audio permission check
@@ -101,9 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 audioRecordingThread = new Thread_RecordingThread(audioRecordObj, customView_viewAudio, this);
                 audioRecordingThread.start();
             }
-        });
-
-        button_playing.setOnClickListener(v -> {
         });
     }
 
