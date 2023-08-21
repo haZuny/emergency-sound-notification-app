@@ -33,8 +33,8 @@ public class Thread_RecordingThread extends Thread {
                 GlobalObj.deeplearningBuffer.validateDeepLearningBuffer(ret, GlobalObj.floatArr_recordingBuffer);
                 // 0.2초에 한번씩 예측
                 int recordingSeq = GlobalObj.deeplearningBuffer.seq;
-                if (recordingSeq >= (int) GlobalObj.sampleRate * GlobalObj.deeplearningBuffer.detect_step) {
-                    GlobalObj.deeplearningBuffer.seq = 0;
+                if (recordingSeq >= (int) GlobalObj.sampleRate * GlobalObj.deeplearningBuffer.detect_step + GlobalObj.sampleRate) {
+                    GlobalObj.deeplearningBuffer.seq = GlobalObj.sampleRate;
                     float predictVal = TFLite.predict();
                     GlobalObj.mainActivity.changeCarHornState(predictVal);
                 }

@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (predictVal > 0.5) {
-                    textView_isCarHorn.setText("경적 감지: " + Float.toString(predictVal));
+                if (predictVal > 0.6) {
+                    textView_isCarHorn.setText(String.format("경적 감지: %.2f%%", predictVal));
                 } else {
-                    textView_isCarHorn.setText("감지 안됨: " + Float.toString(predictVal));
+                    textView_isCarHorn.setText(String.format("감지 안됨: %.2f%%", predictVal));
                 }
 
             }

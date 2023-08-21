@@ -28,7 +28,7 @@ public class GlobalObj {
 }
 
 class DeepLearningBuffer {
-    int seq = 0;
+    int seq = 1;
     static int time_term = 1;  // 1초 버퍼 크기로 검사
     double detect_step = 0.25;  // 0.25초마다 검사
     int bufSize = GlobalObj.sampleRate * time_term;
