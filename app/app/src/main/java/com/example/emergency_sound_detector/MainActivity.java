@@ -3,11 +3,13 @@ package com.example.emergency_sound_detector;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (predictVal > 0.6) {
                     textView_isCarHorn.setText(String.format("경적 감지: %.2f%%", predictVal));
+                    ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(200);
                 } else {
                     textView_isCarHorn.setText(String.format("감지 안됨: %.2f%%", predictVal));
                 }
