@@ -10,7 +10,6 @@ public class Thread_RecordingThread extends Thread {
     AudioRecord audioRecordingObj = null;
     // Custom View _ View Audio
     CustomView_ViewAudio customView_viewAudio = null;
-    int CustomViewStep = 9;
 
     // Main Activity
     Context mainActivityContext;
