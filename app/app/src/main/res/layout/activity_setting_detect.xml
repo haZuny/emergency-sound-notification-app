@@ -102,8 +102,7 @@
                 android:gravity="bottom|top"
                 android:text="Car horn"
                 android:textColor="#5A5A5A"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textSize="28sp" />
 
             <CheckBox
                 android:id="@+id/settingDT_checkbox_carHorn"
@@ -138,8 +137,7 @@
                 android:gravity="bottom|top"
                 android:text="Dog bark"
                 android:textColor="#5A5A5A"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textSize="28sp" />
 
             <CheckBox
                 android:id="@+id/settingDT_checkbox_dogBark"
@@ -172,8 +170,7 @@
                 android:gravity="bottom|top"
                 android:text="Siren"
                 android:textColor="#5A5A5A"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textSize="28sp" />
 
             <CheckBox
                 android:id="@+id/settingDT_checkbox_Siren"

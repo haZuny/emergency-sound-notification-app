@@ -28,8 +28,7 @@
                 android:layout_weight="1.5"
                 android:gravity="bottom"
                 android:text="TextView"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/listitem_history_text_datetime"

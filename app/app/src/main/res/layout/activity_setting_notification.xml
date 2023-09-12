@@ -98,8 +98,7 @@
                 android:layout_weight="2"
                 android:gravity="bottom|top"
                 android:text="Sound"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textSize="26sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -139,8 +138,7 @@
                 android:layout_weight="2"
                 android:gravity="bottom|top"
                 android:text="Sound"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textSize="26sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
