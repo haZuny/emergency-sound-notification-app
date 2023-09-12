@@ -13,6 +13,21 @@
         android:theme="@style/Theme.EmergencySoundDectector"
         tools:targetApi="31">
         <activity
+            android:name=".HistoryViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HistoryIdxActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingDetectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingNotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
