@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 컴포넌트 초기화
-        btn_menuBtn = findViewById(R.id.main_button_menu);
+        btn_menuBtn = findViewById(R.id.settingNoti_button_menu);
 
         // 메뉴 버튼 동작
         btn_menuBtn.setOnClickListener(v->{
@@ -35,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                         startActivity(intent);
                     }else if (menuItem.getItemId() == R.id.menu_main_item2){
-                        Toast.makeText(MainActivity.this, "메뉴 2 클릭", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, HistoryIdxActivity.class);
+                        startActivity(intent);
                     }
                     return false;
                 }

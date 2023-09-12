@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/listitem_history_layout_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|top"
+            android:layout_weight="8"
+            android:foregroundGravity="top|bottom"
+            android:gravity="bottom|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/listitem_history_text_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="bottom"
+                android:text="TextView"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/listitem_history_text_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="TextView" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/listitem_history_button_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:adjustViewBounds="true"
+            android:background="#00FFFFFF"
+            android:padding="10dp"
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/icon_remove" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
