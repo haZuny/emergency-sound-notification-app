@@ -1,18 +1,33 @@
 import os, shutil
 
-path_p = './car_horn_cut/'
-positive_lst = os.listdir(path_p)
+path_0 = './car_horn_cut/'
+list_0 = os.listdir(path_0)
 
-path_n = './other_cut/'
-negative_lst = os.listdir(path_n)
+path_1 = './dog_bark_cut/'
+list_1 = os.listdir(path_1)
+
+path_2 = './siren_cut/'
+list_2 = os.listdir(path_2)
+
+path_3 = './other_cut/'
+list_3 = os.listdir(path_3)
 
 savePath = './shuffle/'
 saveIdx = 0
 
-for name in positive_lst:
-    shutil.copy(path_p + name, savePath + str(saveIdx)+'.wav')
+for name in list_0:
+    shutil.copy(path_0 + name, savePath + str(saveIdx)+'.wav')
+    saveIdx += 1
+    
+for name in list_1:
+    shutil.copy(path_1 + name, savePath + str(saveIdx)+'.wav')
+    saveIdx += 1
+    
+for name in list_2:
+    shutil.copy(path_2 + name, savePath + str(saveIdx)+'.wav')
+    saveIdx += 1
+    
+for name in list_3:
+    shutil.copy(path_3 + name, savePath + str(saveIdx)+'.wav')
     saveIdx += 1
 
-for name in negative_lst:
-    shutil.copy(path_n + name, savePath + str(saveIdx)+'.wav')
-    saveIdx += 1

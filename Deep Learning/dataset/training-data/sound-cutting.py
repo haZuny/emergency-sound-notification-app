@@ -1,9 +1,9 @@
 import os, librosa, soundfile
 import numpy as np
 
-source_path = './other/'
+source_path = './siren/'
 source_lst = os.listdir(source_path)
-savePath = './other_cut/'
+savePath = './siren_cut/'
 
 saveIdx = 0
 
