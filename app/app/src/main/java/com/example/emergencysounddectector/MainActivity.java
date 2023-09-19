@@ -12,7 +12,6 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
@@ -45,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Init Components
-        btn_menuBtn = findViewById(R.id.settingNoti_button_menu);
+        btn_menuBtn = findViewById(R.id.main_button_menu);
         btn_startRecordingBtn = findViewById(R.id.main_button_start);
-        customGraphView = (CustomGraphView) findViewById(R.id.main_view_custom);
+        customGraphView = findViewById(R.id.main_view_custom);
 
         // Menu button actions
         btn_menuBtn.setOnClickListener(v -> {
@@ -76,20 +75,29 @@ public class MainActivity extends AppCompatActivity {
             // PermissionCheck
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 0x00000001);
-                return;
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                    return;
+                }
             }
             // Stop -> Start
             if (audioRecordingState == false) {
                 audioRecordingState = true;
                 btn_startRecordingBtn.setText("Stop");
+                // Generate AudioRecord
                 audioRecord = new AudioRecord(audioRecordSource, audioRecordSampleRate, audioRecordChannelCount, audioRecordFormat, audioRecordBufSize);
                 audioRecord.startRecording();
+                // Generate AudioRecord Thread Obj
+                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView);
+                audioRecordThread.start();
 
             }
             // Start -> Stop
             else{
                 audioRecordingState = false;
                 btn_startRecordingBtn.setText("Start");
+                // stop thread
+                audioRecordThread.stopRunning();
+                // audioRecord Release
                 audioRecord.stop();
                 audioRecord.release();
             }
