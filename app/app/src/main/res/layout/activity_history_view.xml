@@ -131,7 +131,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/historyView_text_percent_carHorn"
+                    android:id="@+id/main_text_percent_carHorn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -149,7 +149,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/historyView_text_percent_siren"
+                    android:id="@+id/main_text_percent_siren"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -174,7 +174,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/historyView_text_percent_dogBark"
+                    android:id="@+id/main_text_percent_dogBark"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -192,7 +192,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/historyView_text_percent_none"
+                    android:id="@+id/main_text_percent_none"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -15,11 +15,19 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
 
     // Components
+    TextView text_carHornPercent;
+    TextView text_dogBarkPercent;
+    TextView text_sirenPercent;
+    TextView text_nonePercent;
     ImageButton btn_menuBtn;
     Button btn_startRecordingBtn;
     CustomGraphView customGraphView;
@@ -37,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     // Audio Record State
     private boolean audioRecordingState = false;
 
+    // Timer (State Update)
+    Timer timer;
+    TimerTask timerTask_updatePercent;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +56,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Init Components
+        text_carHornPercent = findViewById(R.id.main_text_percent_carHorn);
+        text_dogBarkPercent = findViewById(R.id.main_text_percent_dogBark);
+        text_sirenPercent = findViewById(R.id.main_text_percent_siren);
+        text_nonePercent = findViewById(R.id.main_text_percent_none);
         btn_menuBtn = findViewById(R.id.main_button_menu);
         btn_startRecordingBtn = findViewById(R.id.main_button_start);
         customGraphView = findViewById(R.id.main_view_custom);
+
+
+        // Model Init
+        SoundClassifier.initTfliteInterpreter(this, "sound_detection.tflite");
 
         // Menu button actions
         btn_menuBtn.setOnClickListener(v -> {
@@ -70,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
         // Recording Start Button Actions
         btn_startRecordingBtn.setOnClickListener(v -> {
             // PermissionCheck
@@ -87,8 +109,25 @@ public class MainActivity extends AppCompatActivity {
                 audioRecord = new AudioRecord(audioRecordSource, audioRecordSampleRate, audioRecordChannelCount, audioRecordFormat, audioRecordBufSize);
                 audioRecord.startRecording();
                 // Generate AudioRecord Thread Obj
-                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView);
+                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView, this);
                 audioRecordThread.start();
+                // percent update timer
+                timer = new Timer();
+                timerTask_updatePercent = new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                text_carHornPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[0]));
+                                text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
+                                text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
+                                text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
+                            }
+                        });
+                    }
+                };
+                timer.schedule(timerTask_updatePercent, 0, 500);
 
             }
             // Start -> Stop
@@ -100,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
                 // audioRecord Release
                 audioRecord.stop();
                 audioRecord.release();
+                // Timer Release
+                timer.cancel();
             }
         });
     }

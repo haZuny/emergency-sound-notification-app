@@ -11,15 +11,25 @@ public class SoundRecordingThread extends Thread {
     float[] soundOneSecBuffer = new float[22050];
     float[] soundBuffer = new float[3000];
 
+    // Classfier
+    float[] predictOutputBuf = new float[4];
+
     // Custom View
     CustomGraphView customGraphView = null;
+
+    // Deeplearning
+    SoundClassifier soundClassifier = new SoundClassifier();
+
+    // MainActivity
+    MainActivity mainActivity;
 
     boolean runningState = true;
 
     // Constructure
-    public SoundRecordingThread(AudioRecord audioRecord, CustomGraphView customGraphView){
+    public SoundRecordingThread(AudioRecord audioRecord, CustomGraphView customGraphView, MainActivity mainActivity){
         this.audioRecord = audioRecord;
         this.customGraphView = customGraphView;
+        this.mainActivity = mainActivity;
     }
 
     // Stop Run
@@ -39,6 +49,9 @@ public class SoundRecordingThread extends Thread {
             for (int i = 0; i<recordingResult; i++){
                 soundOneSecBuffer[22050-recordingResult+i] = soundBuffer[i];
             }
+
+            // 예측
+            predictOutputBuf = soundClassifier.predict(soundOneSecBuffer, 22050);
 
             // CustomView 갱신
             customGraphView.invalidateSoundBuffer(soundOneSecBuffer);

@@ -1,0 +1,17 @@
+package com.example.emergencysounddectector.JLibrosa.audio.wavFile;
+
+/**
+ * Custom Exception Class to handle errors occurring while loading/reading Wav file.
+ * 
+ * @author abhi-rawat1
+ *
+ */
+public class WavFileException extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
+	public WavFileException(final String message) {
+        super(message);
+    }
+	
+}
