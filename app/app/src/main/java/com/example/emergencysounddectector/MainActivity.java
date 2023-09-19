@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     TextView text_dogBarkPercent;
     TextView text_sirenPercent;
     TextView text_nonePercent;
+    TextView text_predictState;
     ImageButton btn_menuBtn;
     Button btn_startRecordingBtn;
     CustomGraphView customGraphView;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         text_dogBarkPercent = findViewById(R.id.main_text_percent_dogBark);
         text_sirenPercent = findViewById(R.id.main_text_percent_siren);
         text_nonePercent = findViewById(R.id.main_text_percent_none);
+        text_predictState = findViewById(R.id.main_text_state);
         btn_menuBtn = findViewById(R.id.main_button_menu);
         btn_startRecordingBtn = findViewById(R.id.main_button_start);
         customGraphView = findViewById(R.id.main_view_custom);
@@ -116,13 +118,29 @@ public class MainActivity extends AppCompatActivity {
                 timerTask_updatePercent = new TimerTask() {
                     @Override
                     public void run() {
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                // 퍼센트 업데이트
                                 text_carHornPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[0]));
                                 text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
                                 text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
                                 text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
+
+                                // 상태 설정
+                                if (audioRecordThread.predictOutputBuf[0] > 0.6){
+                                    text_predictState.setText("Car horn");
+                                }
+                                else if(audioRecordThread.predictOutputBuf[1] > 0.6){
+                                    text_predictState.setText("Dog bark");
+                                }
+                                else if(audioRecordThread.predictOutputBuf[2] > 0.6){
+                                    text_predictState.setText("Siren");
+                                }
+                                else{
+                                    text_predictState.setText("None");
+                                }
                             }
                         });
                     }
