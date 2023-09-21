@@ -16,7 +16,7 @@ Y = []
 carHorn_data_size = 830
 dogBark_data_size = 1045
 siren_data_size = 1058
-other_data_size = 894
+other_data_size = 1136
 
 # positive와 negative 순서 정의
 data_idx = []
@@ -80,12 +80,12 @@ print(X.shape, Y.shape)
 model = models.Sequential()
 model.add(layers.Conv2D(128, (3,3), activation='relu', input_shape=(64, 44, 1)))
 model.add(layers.MaxPool2D(2,2))
-model.add(layers.Conv2D(64, (3,3), activation='relu'))
+model.add(layers.Conv2D(128, (3,3), activation='relu'))
 model.add(layers.MaxPool2D(2,2))
 model.add(layers.Conv2D(64, (3,3), activation='relu'))
+model.add(layers.MaxPool2D(2,2))
 model.add(layers.Conv2D(32, (3,3), activation='relu'))
-model.add(layers.MaxPool2D(2,2))
-model.add(layers.Dropout(0.2,))
+model.add(layers.Dropout(0.3))
 
 model.add(layers.Flatten())
 model.add(layers.Dense(256, activation='relu'))
@@ -97,12 +97,12 @@ model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.001), loss='categorical_cro
 #model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 학습
-X_train = X[:3000]
-X_val = X[3000:]
-Y_train = Y[:3000]
-Y_val= Y[3000:]
+X_train = X[:3300]
+X_val = X[3300:]
+Y_train = Y[:3300]
+Y_val= Y[3300:]
 
-early_stopping = EarlyStopping(patience=5)
+early_stopping = EarlyStopping(patience=4)
 trained = model.fit(X_train, Y_train, epochs=500, validation_data=(X_val, Y_val), callbacks = [early_stopping])
 
 
