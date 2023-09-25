@@ -2,7 +2,9 @@ package com.example.emergencysounddectector;
 
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.AudioRecord;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -31,6 +33,13 @@ public class SoundRecordingThread extends Thread {
     Vibrator vibrate;
     VibrationEffect vibrationEffect;
 
+    // Sound
+    SoundPool soundPool;
+    int soundId;
+    int streamId = 0;
+
+
+
     // temp
     int lastState = 3;
 
@@ -38,18 +47,22 @@ public class SoundRecordingThread extends Thread {
 
     // Constructure
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public SoundRecordingThread(AudioRecord audioRecord, CustomGraphView customGraphView, MainActivity mainActivity) {
+    public SoundRecordingThread(AudioRecord audioRecord, CustomGraphView customGraphView, MainActivity mainActivity, SoundPool soundPool, int soundId) {
         this.audioRecord = audioRecord;
         this.customGraphView = customGraphView;
         this.mainActivity = mainActivity;
         this.vibrate = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         this.vibrationEffect = VibrationEffect.createOneShot(2147483647, 255);  // amplitude max: 255
+        this.soundPool = soundPool;
+        this.soundId = soundId;
+
     }
 
     // Stop Run
     void stopRunning() {
         runningState = false;
         vibrate.cancel();
+        soundPool.stop(streamId);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -69,21 +82,23 @@ public class SoundRecordingThread extends Thread {
             // 예측
             predictOutputBuf = soundClassifier.predict(soundOneSecBuffer, 22050);
 
-
             // 예측 진동
             if (predictOutputBuf[0] > 0.5) {
                 if (lastState != 0) {
                     vibrate.vibrate(vibrationEffect);
+                    streamId = soundPool.play(soundId, 1, 1, 0,0, 1);
                 }
                 lastState = 0;
             } else if (predictOutputBuf[1] > 0.5) {
                 if (lastState != 1) {
                     vibrate.vibrate(vibrationEffect);
+                    streamId = soundPool.play(soundId, 1, 1, 0,0, 1);
                 }
                 lastState = 1;
             } else if (predictOutputBuf[2] > 0.5) {
                 if (lastState != 2) {
                     vibrate.vibrate(vibrationEffect);
+                    streamId = soundPool.play(soundId, (float) 1, (float) 1, 0,0, 1);
                 }
                 lastState = 2;
             } else {

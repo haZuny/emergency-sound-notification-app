@@ -207,7 +207,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/main_button_start"
+                android:id="@+id/settingNoti_button_save"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"

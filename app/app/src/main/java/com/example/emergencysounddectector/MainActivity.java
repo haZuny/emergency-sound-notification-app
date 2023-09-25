@@ -9,8 +9,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -52,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     Timer timer;
     TimerTask timerTask_updatePercent;
 
+    // Sound
+    SoundPool soundPool;
+    int soundId;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,9 +72,12 @@ public class MainActivity extends AppCompatActivity {
         text_nonePercent = findViewById(R.id.main_text_percent_none);
         text_predictState = findViewById(R.id.main_text_state);
         btn_menuBtn = findViewById(R.id.main_button_menu);
-        btn_startRecordingBtn = findViewById(R.id.main_button_start);
+        btn_startRecordingBtn = findViewById(R.id.settingNoti_button_save);
         customGraphView = findViewById(R.id.main_view_custom);
 
+        // Sound init
+        soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        soundId = soundPool.load(this, R.raw.notify, 1);
 
         // Model Init
         SoundClassifier.initTfliteInterpreter(this, "sound_detection.tflite");
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 audioRecord = new AudioRecord(audioRecordSource, audioRecordSampleRate, audioRecordChannelCount, audioRecordFormat, audioRecordBufSize);
                 audioRecord.startRecording();
                 // Generate AudioRecord Thread Obj
-                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView, this);
+                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView, this, soundPool, soundId);
                 audioRecordThread.start();
                 // percent update timer
                 timer = new Timer();
