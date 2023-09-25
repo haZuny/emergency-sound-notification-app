@@ -1,5 +1,6 @@
 package com.example.emergencysounddectector;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     Timer timer;
     TimerTask timerTask_updatePercent;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 timerTask_updatePercent = new TimerTask() {
                     @Override
                     public void run() {
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -129,13 +131,13 @@ public class MainActivity extends AppCompatActivity {
                                 text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
 
                                 // 상태 설정
-                                if (audioRecordThread.predictOutputBuf[0] > 0.6){
+                                if (audioRecordThread.predictOutputBuf[0] > 0.5){
                                     text_predictState.setText("Car horn");
                                 }
-                                else if(audioRecordThread.predictOutputBuf[1] > 0.6){
+                                else if(audioRecordThread.predictOutputBuf[1] > 0.5){
                                     text_predictState.setText("Dog bark");
                                 }
-                                else if(audioRecordThread.predictOutputBuf[2] > 0.6){
+                                else if(audioRecordThread.predictOutputBuf[2] > 0.5){
                                     text_predictState.setText("Siren");
                                 }
                                 else{
@@ -145,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 };
-                timer.schedule(timerTask_updatePercent, 0, 500);
-
+                timer.schedule(timerTask_updatePercent,0,100);
             }
             // Start -> Stop
             else{
