@@ -1,6 +1,10 @@
 package com.example.emergencysounddectector;
 
-public class DetectedSound {
+import com.example.emergencysounddectector.SQLite.Serializer;
+
+import java.io.Serializable;
+
+public class DetectedSound implements Serializable {
     int id;
     String category;
     float percent_carhorn;

@@ -146,6 +146,7 @@ public class HistoryIdxActivity extends AppCompatActivity {
             // 타이틀 레이아웃 클릭
             laytou_title.setOnClickListener(v -> {
                 Intent intent = new Intent(HistoryIdxActivity.this, HistoryViewActivity.class);
+                intent.putExtra("sound", detectedSound);
                 startActivity(intent);
             });
 

@@ -73,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Init Components
-        text_carHornPercent = findViewById(R.id.main_text_percent_carHorn);
-        text_dogBarkPercent = findViewById(R.id.main_text_percent_dogBark);
-        text_sirenPercent = findViewById(R.id.main_text_percent_siren);
-        text_nonePercent = findViewById(R.id.main_text_percent_none);
+        text_carHornPercent = findViewById(R.id.historyView_text_percent_carHorn);
+        text_dogBarkPercent = findViewById(R.id.historyView_text_percent_dogBark);
+        text_sirenPercent = findViewById(R.id.historyView_text_percent_siren);
+        text_nonePercent = findViewById(R.id.historyView_text_percent_none);
         text_predictState = findViewById(R.id.main_text_state);
         btn_menuBtn = findViewById(R.id.main_button_menu);
         btn_startRecordingBtn = findViewById(R.id.settingNoti_button_save);
@@ -114,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.show();
         });
 
-
-
-
         // Recording Start Button Actions
         btn_startRecordingBtn.setOnClickListener(v -> {
             // PermissionCheck
@@ -149,20 +146,6 @@ public class MainActivity extends AppCompatActivity {
                                 text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
                                 text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
                                 text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
-
-                                // 상태 설정
-                                if (audioRecordThread.predictOutputBuf[0] > 0.5){
-                                    text_predictState.setText("Car horn");
-                                }
-                                else if(audioRecordThread.predictOutputBuf[1] > 0.5){
-                                    text_predictState.setText("Dog bark");
-                                }
-                                else if(audioRecordThread.predictOutputBuf[2] > 0.5){
-                                    text_predictState.setText("Siren");
-                                }
-                                else{
-                                    text_predictState.setText("None");
-                                }
                             }
                         });
                     }
@@ -182,5 +165,32 @@ public class MainActivity extends AppCompatActivity {
                 timer.cancel();
             }
         });
+    }
+
+    public void changeState(int state){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (state){
+
+                    case 0:
+                        text_predictState.setText("Car horn");
+                        break;
+                    case 1:
+                        text_predictState.setText("Dog bark");
+                        break;
+                    case 2:
+                        text_predictState.setText("Siren");
+                        break;
+                    case 3:
+                        text_predictState.setText("None");
+                        break;
+                    default:
+                        text_predictState.setText("None");
+                        break;
+                }
+            }
+        });
+
     }
 }

@@ -8,6 +8,7 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -47,6 +48,9 @@ public class SoundRecordingThread extends Thread {
     SQLiteDatabase sqLiteDatabase;
 
     // temp
+    int cnt = 0;
+    int tempSize = 5;
+    int[] temp = new int[tempSize];
     int lastState = 3;
 
     boolean runningState = true;
@@ -63,6 +67,11 @@ public class SoundRecordingThread extends Thread {
         this.soundId = mainActivity.soundId;
         this.sqLiteHelper = mainActivity.sqliteHelper;
         this.sqLiteDatabase = mainActivity.sqLiteDatabase;
+        
+        // temp 초기화
+        for (int i = 0; i < tempSize; i++){
+            temp[i] = 3;
+        }
     }
 
     // Stop Run
@@ -85,38 +94,64 @@ public class SoundRecordingThread extends Thread {
             for (int i = 0; i < recordingResult; i++) {
                 soundOneSecBuffer[22050 - recordingResult + i] = soundBuffer[i];
             }
+            if (cnt < 22050){
+                cnt += recordingResult;
+                continue;
+            }
 
             // 예측
             predictOutputBuf = soundClassifier.predict(soundOneSecBuffer, 22050);
 
-            // 예측 진동
-            if (predictOutputBuf[0] > 0.5) {
-                if (lastState != 0) {
-                    vibrate.vibrate(vibrationEffect);
-                    playNotiSound();
-                }
-                lastState = 0;
-            } else if (predictOutputBuf[1] > 0.5) {
-                if (lastState != 1) {
-                    vibrate.vibrate(vibrationEffect);
-                    playNotiSound();
-                }
-                lastState = 1;
-            } else if (predictOutputBuf[2] > 0.5) {
-                if (lastState != 2) {
-                    vibrate.vibrate(vibrationEffect);
-                    playNotiSound();
-                    try {
-                        sqLiteDatabase.execSQL(sqLiteHelper.getInsertQuery("Siren", predictOutputBuf, soundBuffer));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+            // 예측 결과 0.5 넘을 경우 탐색
+            for (int i = 0; i < 4; i++){
+                if (predictOutputBuf[i] > 0.5){
+                    // temp에 기록
+                    for (int j = 0; j < tempSize-1; j++){
+                        temp[j] = temp[j+1];
+                    }
+                    temp[tempSize-1] = i;
+
+                    // 모든 temp가 동일하면 갱신
+                    boolean state = true;
+                    for (int temp:temp){
+                        if (temp != i){state = false;}
+                    }
+                    // 알림
+                    if(state && i != 3 && i!=2 && lastState != i){
+                        mainActivity.changeState(i);    // 상태 변경
+                        vibrate.vibrate(vibrationEffect);   // 진동
+                        playNotiSound();    // 소리
+                        String category;    // Category 결정
+                        switch (i){
+                            case 0:
+                                category = "Car horn";
+                                break;
+                            case 1:
+                                category = "Dog bark";
+                                break;
+                            case 2:
+                                category = "Siren";
+                                break;
+                            default:
+                                category = "None";
+                                break;
+                        }
+                        lastState = i;
+                        // DB 기록
+                        try {
+                            sqLiteDatabase.execSQL(sqLiteHelper.getInsertQuery(category, predictOutputBuf, soundOneSecBuffer));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    // 알림 중지
+                    else if(state && i == 3){
+                        mainActivity.changeState(i);    // 상태변경
+                        vibrate.cancel();   // 진동정지
+                        soundPool.stop(streamId);   // 소리정지
+                        lastState = 3;
                     }
                 }
-                lastState = 2;
-            } else {
-                vibrate.cancel();
-                soundPool.stop(streamId);
-                lastState = 3;
             }
 
             // CustomView 갱신
