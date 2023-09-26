@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -20,6 +21,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import com.example.emergencysounddectector.SQLite.SQLiteHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
     SoundPool soundPool;
     int soundId;
 
+    // SQLite
+    SQLiteHelper sqliteHelper;
+    SQLiteDatabase sqLiteDatabase;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     @Override
@@ -79,8 +86,12 @@ public class MainActivity extends AppCompatActivity {
         soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
         soundId = soundPool.load(this, R.raw.notify, 1);
 
-        // Model Init
+        // Deeplearning Model Init
         SoundClassifier.initTfliteInterpreter(this, "sound_detection.tflite");
+
+        // SQLite Init
+        sqliteHelper = new SQLiteHelper(this);
+        sqLiteDatabase = sqliteHelper.getWritableDatabase();
 
         // Menu button actions
         btn_menuBtn.setOnClickListener(v -> {
@@ -123,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 audioRecord = new AudioRecord(audioRecordSource, audioRecordSampleRate, audioRecordChannelCount, audioRecordFormat, audioRecordBufSize);
                 audioRecord.startRecording();
                 // Generate AudioRecord Thread Obj
-                audioRecordThread = new SoundRecordingThread(audioRecord, customGraphView, this, soundPool, soundId);
+                audioRecordThread = new SoundRecordingThread(this);
                 audioRecordThread.start();
                 // percent update timer
                 timer = new Timer();

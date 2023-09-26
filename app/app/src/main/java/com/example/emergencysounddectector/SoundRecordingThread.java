@@ -2,7 +2,7 @@ package com.example.emergencysounddectector;
 
 
 import android.content.Context;
-import android.media.AudioManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioRecord;
 import android.media.SoundPool;
 import android.os.Build;
@@ -10,6 +10,10 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 
 import androidx.annotation.RequiresApi;
+
+import com.example.emergencysounddectector.SQLite.SQLiteHelper;
+
+import java.io.IOException;
 
 public class SoundRecordingThread extends Thread {
     // Audio Record
@@ -33,12 +37,14 @@ public class SoundRecordingThread extends Thread {
     Vibrator vibrate;
     VibrationEffect vibrationEffect;
 
-    // Sound
+    // Notify Sound
     SoundPool soundPool;
     int soundId;
     int streamId = 0;
 
-
+    // SQLite
+    SQLiteHelper sqLiteHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     // temp
     int lastState = 3;
@@ -47,15 +53,16 @@ public class SoundRecordingThread extends Thread {
 
     // Constructure
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public SoundRecordingThread(AudioRecord audioRecord, CustomGraphView customGraphView, MainActivity mainActivity, SoundPool soundPool, int soundId) {
-        this.audioRecord = audioRecord;
-        this.customGraphView = customGraphView;
+    public SoundRecordingThread(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+        this.audioRecord = mainActivity.audioRecord;
+        this.customGraphView = mainActivity.customGraphView;
         this.vibrate = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         this.vibrationEffect = VibrationEffect.createOneShot(2147483647, 255);  // amplitude max: 255
-        this.soundPool = soundPool;
-        this.soundId = soundId;
-
+        this.soundPool = mainActivity.soundPool;
+        this.soundId = mainActivity.soundId;
+        this.sqLiteHelper = mainActivity.sqliteHelper;
+        this.sqLiteDatabase = mainActivity.sqLiteDatabase;
     }
 
     // Stop Run
@@ -86,23 +93,29 @@ public class SoundRecordingThread extends Thread {
             if (predictOutputBuf[0] > 0.5) {
                 if (lastState != 0) {
                     vibrate.vibrate(vibrationEffect);
-                    streamId = soundPool.play(soundId, 1, 1, 0,0, 1);
+                    playNotiSound();
                 }
                 lastState = 0;
             } else if (predictOutputBuf[1] > 0.5) {
                 if (lastState != 1) {
                     vibrate.vibrate(vibrationEffect);
-                    streamId = soundPool.play(soundId, 1, 1, 0,0, 1);
+                    playNotiSound();
                 }
                 lastState = 1;
             } else if (predictOutputBuf[2] > 0.5) {
                 if (lastState != 2) {
                     vibrate.vibrate(vibrationEffect);
-                    streamId = soundPool.play(soundId, (float) 1, (float) 1, 0,0, 1);
+                    playNotiSound();
+                    try {
+                        sqLiteDatabase.execSQL(sqLiteHelper.getInsertQuery("Siren", predictOutputBuf, soundBuffer));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 lastState = 2;
             } else {
                 vibrate.cancel();
+                soundPool.stop(streamId);
                 lastState = 3;
             }
 
@@ -112,4 +125,10 @@ public class SoundRecordingThread extends Thread {
         }
     }
 
+
+    // 음악 재생
+    void playNotiSound(){
+        soundPool.stop(streamId);
+        streamId = soundPool.play(soundId, (float) 1, (float) 1, 0,-1, 1);
+    }
 }

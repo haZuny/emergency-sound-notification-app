@@ -1,9 +1,13 @@
 package com.example.emergencysounddectector;
 
+import static com.example.emergencysounddectector.SQLite.Serializer.stringToArray;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.emergencysounddectector.SQLite.SQLiteHelper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HistoryIdxActivity extends AppCompatActivity {
@@ -23,29 +30,49 @@ public class HistoryIdxActivity extends AppCompatActivity {
     ListView listViet_historyIdx;
 
     // 리스트뷰 리스트
-    ArrayList<History> histories;
+    ArrayList<DetectedSound> histories = new ArrayList<>();
+
+    // SQLite
+    SQLiteHelper sqliteHelper;
+    SQLiteDatabase sqLiteDatabase;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_idx);
 
-        // (임시)
-        histories = new ArrayList<>();
-        histories.add(new History("Car horn", 75, "2023.09.11 10:12"));
-        histories.add(new History("Dog bark", 60, "2023.09.11 10:12"));
-        histories.add(new History("Dog bark", 99, "2023.09.11 10:12"));
-        histories.add(new History("Siren", 87, "2023.09.11 10:12"));
-        histories.add(new History("Siren", 73, "2023.09.11 10:12"));
-        histories.add(new History("Siren", 75, "2023.09.11 10:12"));
-
         // 컴포넌트 초기화
         listViet_historyIdx = findViewById(R.id.historyIdx_listView);
 
+
+        // SQLite Init
+        sqliteHelper = new SQLiteHelper(this);
+        sqLiteDatabase = sqliteHelper.getWritableDatabase();
+        cursor = sqLiteDatabase.rawQuery(sqliteHelper.getSelectAllQuery(), null);
+
+        // db정보 가져옴
+        while(cursor.moveToNext()){
+            Log.d("db", String.format("%s, %d, %s", cursor.getString(1), cursor.getInt(0), cursor.getString(7)));
+            int id = cursor.getInt(0);
+            String category = cursor.getString(1);
+            float percent_carHorn = cursor.getFloat(2);
+            float percent_dogBark = cursor.getFloat(3);
+            float percent_siren = cursor.getFloat(4);
+            float percent_none = cursor.getFloat(5);
+            float[] soundBuf;
+            try {
+                soundBuf = stringToArray(cursor.getString(6));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String datetime = cursor.getString(7);
+            histories.add(new DetectedSound(id, category, percent_carHorn, percent_dogBark, percent_siren, percent_none, soundBuf, datetime));
+        }
+        
         // 리스트뷰 연결
         HistoryIdxAdapter adapter = new HistoryIdxAdapter(this, histories);
         listViet_historyIdx.setAdapter(adapter);
-
     }
 
     // 히스토리 클래스
@@ -76,9 +103,9 @@ public class HistoryIdxActivity extends AppCompatActivity {
 
         Context mContext;
         LayoutInflater mLayoutInflater;
-        ArrayList<History> histories;
+        ArrayList<DetectedSound> histories;
 
-        public HistoryIdxAdapter(Context context, ArrayList<History> data) {
+        public HistoryIdxAdapter(Context context, ArrayList<DetectedSound> data) {
             mContext = context;
             histories = data;
             mLayoutInflater = LayoutInflater.from(context);
@@ -95,7 +122,7 @@ public class HistoryIdxActivity extends AppCompatActivity {
         }
 
         @Override
-        public History getItem(int position) {
+        public DetectedSound getItem(int position) {
             return histories.get(position);
         }
 
@@ -109,9 +136,12 @@ public class HistoryIdxActivity extends AppCompatActivity {
             TextView text_datetime = (TextView) view.findViewById(R.id.listitem_history_text_datetime);
             ImageButton button_delete = view.findViewById(R.id.listitem_history_button_delete);
 
+            // Detected Sound 객체
+            DetectedSound detectedSound = histories.get(position);
+
             // view 갱신
-            text_title.setText(histories.get(position).getType() + " - " + histories.get(position).getPercent()+"%");
-            text_datetime.setText(histories.get(position).getDatetime());
+            text_title.setText(detectedSound.category + " - " + detectedSound.bestPercent+"%");
+            text_datetime.setText(detectedSound.datetime);
 
             // 타이틀 레이아웃 클릭
             laytou_title.setOnClickListener(v -> {
@@ -121,6 +151,7 @@ public class HistoryIdxActivity extends AppCompatActivity {
 
             // 삭제버튼 클릭
             button_delete.setOnClickListener(v -> {
+                sqLiteDatabase.execSQL(sqliteHelper.getDeleteQuery(detectedSound.id));
                 histories.remove(position);
                 this.notifyDataSetChanged();
             });
@@ -128,4 +159,6 @@ public class HistoryIdxActivity extends AppCompatActivity {
             return view;
         }
     }
+
+
 }
