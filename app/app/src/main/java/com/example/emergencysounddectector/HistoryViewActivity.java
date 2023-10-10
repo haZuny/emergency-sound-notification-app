@@ -35,7 +35,6 @@ public class HistoryViewActivity extends AppCompatActivity {
     DetectedSound detectedSound;
 
     // Audio Play
-    byte[] audioData = new byte[22050*4];
     AudioTrack audioTrack;
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
@@ -68,23 +67,12 @@ public class HistoryViewActivity extends AppCompatActivity {
         customGraphView.invalidateSoundBuffer(detectedSound.sound);
         customGraphView.invalidate();
 
-        // Audio get
-        // float[] -> byte[]
-        for (int i = 0; i < 22050; i++) {
-            int val = (int) (detectedSound.sound[i] * (2^16-1));  // 32bit -2^16 ~ 2^16
-            audioData[i*4] = (byte) (val>>24);    // OXXX -> XXXO
-            audioData[i*4+1] = (byte) (val>>16);  // XOXX -> XXXO
-            audioData[i*4+2] = (byte) (val>>8);   // XXOX -> XXXO
-            audioData[i*4+3] = (byte) (val);      // XXXO -> XXXO
-        }
-
-
         // Play btn action
         button_play.setOnClickListener(v -> {
             final int TEST_CONF = AudioFormat.CHANNEL_OUT_MONO;
-            final int TEST_FORMAT = AudioFormat.ENCODING_PCM_FLOAT;
-            final int TEST_MODE = AudioTrack.MODE_STATIC; //I need static mode.
-            final int TEST_STREAM_TYPE = AudioManager.STREAM_ALARM;
+            final int TEST_FORMAT = AudioFormat.ENCODING_PCM_FLOAT; // float: 32bit
+            final int TEST_MODE = AudioTrack.MODE_STATIC;
+            final int TEST_STREAM_TYPE = AudioManager.STREAM_MUSIC;
             audioTrack = new AudioTrack(TEST_STREAM_TYPE, 22050, TEST_CONF, TEST_FORMAT, 22050*4, TEST_MODE);
             audioTrack.write(detectedSound.sound, 0, 22050, AudioTrack.WRITE_BLOCKING);
             audioTrack.play();

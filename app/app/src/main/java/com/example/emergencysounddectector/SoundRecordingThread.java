@@ -49,7 +49,7 @@ public class SoundRecordingThread extends Thread {
 
     // temp
     int cnt = 0;
-    int tempSize = 5;
+    int tempSize = 10;
     int[] temp = new int[tempSize];
     int lastState = 3;
 
@@ -102,7 +102,7 @@ public class SoundRecordingThread extends Thread {
             // 예측
             predictOutputBuf = soundClassifier.predict(soundOneSecBuffer, 22050);
 
-            // 예측 결과 0.5 넘을 경우 탐색
+            // 각 카테고리에 대해서, 예측 결과 0.5 넘을 경우 탐색
             for (int i = 0; i < 4; i++){
                 if (predictOutputBuf[i] > 0.5){
                     // temp에 기록
@@ -118,9 +118,9 @@ public class SoundRecordingThread extends Thread {
                     }
                     // 알림
                     if(state && i != 3 && i!=2 && lastState != i){
-                        mainActivity.changeState(i);    // 상태 변경
                         vibrate.vibrate(vibrationEffect);   // 진동
                         playNotiSound();    // 소리
+                        lastState = i;
                         String category;    // Category 결정
                         switch (i){
                             case 0:
@@ -136,7 +136,7 @@ public class SoundRecordingThread extends Thread {
                                 category = "None";
                                 break;
                         }
-                        lastState = i;
+                        mainActivity.changeTypeState(category);
                         // DB 기록
                         try {
                             sqLiteDatabase.execSQL(sqLiteHelper.getInsertQuery(category, predictOutputBuf, soundOneSecBuffer));
@@ -146,13 +146,17 @@ public class SoundRecordingThread extends Thread {
                     }
                     // 알림 중지
                     else if(state && i == 3){
-                        mainActivity.changeState(i);    // 상태변경
+                        mainActivity.changeTypeState("None");
                         vibrate.cancel();   // 진동정지
                         soundPool.stop(streamId);   // 소리정지
                         lastState = 3;
                     }
                 }
             }
+
+            // MainActivity percent 상태 갱신
+            mainActivity.changePercent(predictOutputBuf);
+
 
             // CustomView 갱신
             customGraphView.invalidateSoundBuffer(soundOneSecBuffer);

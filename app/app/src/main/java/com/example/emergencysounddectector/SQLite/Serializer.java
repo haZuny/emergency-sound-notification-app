@@ -11,18 +11,17 @@ import java.util.Base64;
 
 public class Serializer {
     public static String arrayToString(float[] array) throws IOException {
-        byte[] serializeMember;
-        try(ByteArrayOutputStream baos= new ByteArrayOutputStream()){
-            try(ObjectOutputStream oos= new ObjectOutputStream(baos)){
-                oos.writeObject(array);
-                // serializedMember -> 직렬화된 member 객체
-                serializeMember = baos.toByteArray();
+        byte[] byteArray;
+        try(ByteArrayOutputStream byteOutputStream= new ByteArrayOutputStream()){
+            try(ObjectOutputStream objectOutputStream= new ObjectOutputStream(byteOutputStream)){
+                objectOutputStream.writeObject(array);
+                byteArray = byteOutputStream.toByteArray();
             }
         }
         //바이트 배열로 생성된 직렬화 데이터를 base64로 변환
         // base64: 8bit(64) -> ASCII String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return Base64.getEncoder().encodeToString(serializeMember);
+            return Base64.getEncoder().encodeToString(byteArray);
         }
         return "";
     }

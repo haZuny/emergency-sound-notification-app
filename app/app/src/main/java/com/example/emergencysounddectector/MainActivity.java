@@ -134,23 +134,23 @@ public class MainActivity extends AppCompatActivity {
                 audioRecordThread = new SoundRecordingThread(this);
                 audioRecordThread.start();
                 // percent update timer
-                timer = new Timer();
-                timerTask_updatePercent = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 퍼센트 업데이트
-                                text_carHornPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[0]));
-                                text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
-                                text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
-                                text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
-                            }
-                        });
-                    }
-                };
-                timer.schedule(timerTask_updatePercent,0,100);
+//                timer = new Timer();
+//                timerTask_updatePercent = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                // 퍼센트 업데이트
+//                                text_carHornPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[0]));
+//                                text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
+//                                text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
+//                                text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
+//                            }
+//                        });
+//                    }
+//                };
+//                timer.schedule(timerTask_updatePercent,0,100);
             }
             // Start -> Stop
             else{
@@ -162,35 +162,29 @@ public class MainActivity extends AppCompatActivity {
                 audioRecord.stop();
                 audioRecord.release();
                 // Timer Release
-                timer.cancel();
+//                timer.cancel();
             }
         });
     }
 
-    public void changeState(int state){
+    public void changeTypeState(String category){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                switch (state){
-
-                    case 0:
-                        text_predictState.setText("Car horn");
-                        break;
-                    case 1:
-                        text_predictState.setText("Dog bark");
-                        break;
-                    case 2:
-                        text_predictState.setText("Siren");
-                        break;
-                    case 3:
-                        text_predictState.setText("None");
-                        break;
-                    default:
-                        text_predictState.setText("None");
-                        break;
-                }
+                text_predictState.setText(category);
             }
         });
+    }
 
+    public void changePercent(float[] outputBuf){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text_carHornPercent.setText(String.format("%.2f%%", outputBuf[0]));
+                text_dogBarkPercent.setText(String.format("%.2f%%", outputBuf[1]));
+                text_sirenPercent.setText(String.format("%.2f%%", outputBuf[2]));
+                text_nonePercent.setText(String.format("%.2f%%", outputBuf[3]));
+            }
+        });
     }
 }

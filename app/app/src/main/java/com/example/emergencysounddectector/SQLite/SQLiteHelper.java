@@ -23,8 +23,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table "+tableName+" (id integer primary key autoincrement, category text, " +
-                "percent_carhorn real, percent_dogbark real, percent_siren real, percent_none real, sound_buf text, datetime text);");
+        db.execSQL("create table " + tableName + " (id integer primary key autoincrement, category text, " + "percent_carhorn real, percent_dogbark real, percent_siren real, percent_none real, sound_buf text, datetime text);");
     }
 
     @Override
@@ -45,17 +44,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.mm.dd hh:mm"));
         }
 
-        return String.format("insert into %s(category, percent_carhorn, percent_dogbark, percent_siren, percent_none, sound_buf, datetime) values('%s', %f, %f, %f, %f, '%s', '%s')",
-                tableName, category, percent_carhorn, percent_dogbark, percent_siren, percent_none, serializedSound, datetime);
+        return String.format("insert into %s(category, percent_carhorn, percent_dogbark, percent_siren, percent_none, sound_buf, datetime) values('%s', %f, %f, %f, %f, '%s', '%s')", tableName, category, percent_carhorn, percent_dogbark, percent_siren, percent_none, serializedSound, datetime);
     }
 
     // get select all query
-    public String getSelectAllQuery(){
+    public String getSelectAllQuery() {
         return "select * from " + tableName;
     }
 
     // get delete item query
-    public String getDeleteQuery(int id){
+    public String getDeleteQuery(int id) {
         return String.format("delete from %s where id=%d", tableName, id);
     }
 }

@@ -67,7 +67,7 @@ public class HistoryIdxActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             String datetime = cursor.getString(7);
-            histories.add(new DetectedSound(id, category, percent_carHorn, percent_dogBark, percent_siren, percent_none, soundBuf, datetime));
+            histories.add(0, new DetectedSound(id, category, percent_carHorn, percent_dogBark, percent_siren, percent_none, soundBuf, datetime));
         }
         
         // 리스트뷰 연결
