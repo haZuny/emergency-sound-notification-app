@@ -12,17 +12,19 @@ public class DetectedSound implements Serializable {
     float percent_siren;
     float percent_none;
     float[] sound;
+    String soundString;
     String datetime;
 
     int bestPercent;
 
-    public DetectedSound(int id, String category, float percent_carhorn, float percent_dogbark, float percent_siren, float percent_none, float[] soundBuf, String datetime){
+    public DetectedSound(int id, String category, float percent_carhorn, float percent_dogbark, float percent_siren, float percent_none, String soundString, float[] soundBuf, String datetime){
         this.id = id;
         this.category = category;
         this.percent_carhorn = percent_carhorn;
         this.percent_dogbark = percent_dogbark;
         this.percent_siren = percent_siren;
         this.percent_none = percent_none;
+        this.soundString = soundString;
         this.sound = soundBuf;
         this.datetime = datetime;
 

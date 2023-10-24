@@ -21,7 +21,7 @@ public class SettingNotificationActivity extends AppCompatActivity {
         // init components
         seekBar_soundSeekbar = findViewById(R.id.settingNoti_seekbar_sound);
         seekBar_vibrationSeekbar = findViewById(R.id.settingNoti_seekbar_vib);
-        button_save = findViewById(R.id.settingNoti_button_save);
+        button_save = findViewById(R.id.historyView_button_yes);
 
         button_save.setOnClickListener(v -> {
             

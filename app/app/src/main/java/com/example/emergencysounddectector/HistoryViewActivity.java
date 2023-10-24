@@ -12,8 +12,10 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class HistoryViewActivity extends AppCompatActivity {
@@ -27,6 +29,8 @@ public class HistoryViewActivity extends AppCompatActivity {
     TextView textView_percent_none;
     CustomGraphView customGraphView;
     Button button_play;
+    Button button_yes;
+    Button button_no;
 
     // Intent
     Intent intent;
@@ -36,6 +40,9 @@ public class HistoryViewActivity extends AppCompatActivity {
 
     // Audio Play
     AudioTrack audioTrack;
+
+    // HTTP connection
+    HttpCommunication httpCommunication;
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -52,6 +59,8 @@ public class HistoryViewActivity extends AppCompatActivity {
         textView_percent_none = findViewById(R.id.historyView_text_percent_none);
         customGraphView = findViewById(R.id.historyView_view_custom);
         button_play = findViewById(R.id.historyView_button_play);
+        button_yes = findViewById(R.id.historyView_button_yes);
+        button_no = findViewById(R.id.historyView_button_no);
 
         // Get Intent
         intent = getIntent();
@@ -76,6 +85,25 @@ public class HistoryViewActivity extends AppCompatActivity {
             audioTrack = new AudioTrack(TEST_STREAM_TYPE, 22050, TEST_CONF, TEST_FORMAT, 22050*4, TEST_MODE);
             audioTrack.write(detectedSound.sound, 0, 22050, AudioTrack.WRITE_BLOCKING);
             audioTrack.play();
+        });
+
+        // Yes btn action
+        button_yes.setOnClickListener(v -> {
+            // new Thread, 네트워크 통신은 main 쓰레드가 아닌 별도 쓰레드에서
+            new Thread(() -> {
+                // HTTP connection
+                try {
+                    httpCommunication = new HttpCommunication("http://220.69.208.121:4000/true-val/");
+                    String jsonString = httpCommunication.getJsonString(detectedSound.id, detectedSound.category, detectedSound.percent_carhorn, detectedSound.percent_dogbark, detectedSound.percent_siren, detectedSound.percent_none, detectedSound.soundString, detectedSound.datetime);
+                    String response = httpCommunication.sendPostMethod(jsonString);
+                    Log.d("aaaaa", response);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
+
         });
 
     }

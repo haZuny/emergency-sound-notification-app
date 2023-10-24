@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         text_nonePercent = findViewById(R.id.historyView_text_percent_none);
         text_predictState = findViewById(R.id.main_text_state);
         btn_menuBtn = findViewById(R.id.main_button_menu);
-        btn_startRecordingBtn = findViewById(R.id.settingNoti_button_save);
+        btn_startRecordingBtn = findViewById(R.id.historyView_button_yes);
         customGraphView = findViewById(R.id.main_view_custom);
 
         // Sound init

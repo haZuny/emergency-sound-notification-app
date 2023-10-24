@@ -177,7 +177,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/settingNoti_button_save"
+                android:id="@+id/historyView_button_yes"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
