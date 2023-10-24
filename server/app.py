@@ -22,10 +22,8 @@ def true_val():
     
     # GET, 데이터 인덱스 접근
     if request.method == 'GET':
-        
         # Get current time
         now = str(datetime.now())[:16]
-        
         
         # Get DB
         sqlite_connect = sqlite3.connect('sound.db')
@@ -33,7 +31,7 @@ def true_val():
         sqlite_cursor.execute("SELECT id, category, datetime FROM true")
         db_list = sqlite_cursor.fetchall()
         
-        return render_template('index.html', time = now, dataList = db_list)
+        return render_template('index.html',  type = "useful", time = now, dataList = db_list)
     
     # POST, 데이터 저장
     if request.method == 'POST':
@@ -66,6 +64,23 @@ def true_val():
         # Save with SQLite
         return jsonify({'state':'success', 'msg':"Successfully save data"}, 200)
     
+@app.route('/true-val/<id>/', methods=['GET'])
+def true_val_data(id):
+    
+    # GET, 데이터 인덱스 접근
+    if request.method == 'GET': 
+        # Get current time
+        now = str(datetime.now())[:16]
+             
+        # Get DB
+        sqlite_connect = sqlite3.connect('sound.db')
+        sqlite_cursor = sqlite_connect.cursor()
+        sqlite_cursor.execute("SELECT * FROM true where id = " + str(id))
+        db_list = sqlite_cursor.fetchall()
+        
+        return render_template('detail.html',nowTime = now, category = db_list[0][1], percent_carHorn = f"{db_list[0][2]:.4f}", percent_dogBark = f"{db_list[0][3]:.4f}", percent_siren= f"{db_list[0][4]:.4f}", percent_none= f"{db_list[0][5]:.4f}", datetime=db_list[0][7])
+    
+    
     
 ###
 # False Value Rauting
@@ -75,7 +90,16 @@ def false_val():
     
     # GET, 데이터 인덱스 접근
     if request.method == 'GET':
-        return jsonify(400, {'state':'error', 'msg':'Body contents are not match with this server.'})
+        # Get current time
+        now = str(datetime.now())[:16]
+        
+        # Get DB
+        sqlite_connect = sqlite3.connect('sound.db')
+        sqlite_cursor = sqlite_connect.cursor()
+        sqlite_cursor.execute("SELECT id, category, datetime FROM false")
+        db_list = sqlite_cursor.fetchall()
+        
+        return render_template('index.html', type = "unuseful", time = now, dataList = db_list)
     
     # POST, 데이터 저장
     if request.method == 'POST':
@@ -108,7 +132,22 @@ def false_val():
         
         # Save with SQLite
         return jsonify({'state':'success', 'msg':"Successfully save data"}, 200)
+
+@app.route('/false-val/<id>/', methods=['GET'])
+def false_val_data(id):
     
+    # GET, 데이터 인덱스 접근
+    if request.method == 'GET': 
+        # Get current time
+        now = str(datetime.now())[:16]
+             
+        # Get DB
+        sqlite_connect = sqlite3.connect('sound.db')
+        sqlite_cursor = sqlite_connect.cursor()
+        sqlite_cursor.execute("SELECT * FROM false where id = " + str(id))
+        db_list = sqlite_cursor.fetchall()
+        
+        return render_template('detail.html',nowTime = now, category = db_list[0][1], percent_carHorn = f"{db_list[0][2]:.4f}", percent_dogBark = f"{db_list[0][3]:.4f}", percent_siren= f"{db_list[0][4]:.4f}", percent_none= f"{db_list[0][5]:.4f}", datetime=db_list[0][7])
     
     
 ###

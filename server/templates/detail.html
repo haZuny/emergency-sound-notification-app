@@ -11,19 +11,24 @@
 <body topmargin="0" leftmargin="0" style="width: 100%; height: 250px;">
     <header style="width: 100%; height: 100%; background-color: #404040; padding-top: 1px; margin-bottom: 100px;">
         <h1 style="margin-top:40px; margin-left:50px; font-size:40px; font-; color:white">
-            This is a index page of {{type}} datas.
+            This is a page of 'Useful Data'
         </h1>
         <div style="margin-top:40px; margin-left:50px; font-size:18px; color:white">
             This page is loaded at
         </div>
         <h2 style="margin-top:5px; margin-left:50px; font-size:30px; color:white">
-            {{time}}
+            {{nowTime}}
         </h2>
     </header>
 
-    {% for id, category, datetime in dataList %}
-        <a href="{{id}}" style="color: black; text-decoration:none;" onmouseover="style='text-decoration:underline; color:black'" onmouseout="style='text-decoration:none; color:black;'"><div style="margin-bottom:70px; margin-left: 200px; font-size:30px;"><b>{{category}}</b> <spen style="font-size: 20px;"> - {{datetime}}</spen></div></a>
-    {% endfor %}
+    <div style="margin-bottom:30px; margin-left: 150px; font-size:30px;"><b>{{category}}</b> <spen style="font-size: 20px;"> - {{nowTime}}</spen></div>
+    <ul>
+        <li style="margin-bottom:30px; margin-left: 200px; font-size:20px;">car horn percent: {{percent_carHorn}}%</li>
+        <li style="margin-bottom:30px; margin-left: 200px; font-size:20px;">dog bark percent: {{percent_dogBark}}%</li>
+        <li style="margin-bottom:30px; margin-left: 200px; font-size:20px;">siren percent: {{percent_siren}}%</li>
+        <li style="margin-bottom:30px; margin-left: 200px; font-size:20px;">none percent: {{percent_none}}%</li>
+    </ul>
+
     <div style="position: fixed; bottom: 20px; right: 20px;">순천향대학교 컴퓨터공학과 권하준</div>
 
 </body>
