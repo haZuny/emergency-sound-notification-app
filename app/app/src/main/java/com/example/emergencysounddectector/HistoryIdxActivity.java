@@ -37,6 +37,8 @@ public class HistoryIdxActivity extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     Cursor cursor;
 
+    HistoryIdxAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +74,40 @@ public class HistoryIdxActivity extends AppCompatActivity {
         }
         
         // 리스트뷰 연결
-        HistoryIdxAdapter adapter = new HistoryIdxAdapter(this, histories);
+        adapter = new HistoryIdxAdapter(this, histories);
         listViet_historyIdx.setAdapter(adapter);
+    }
+
+    // 액티비티 다시 실행될 때 어댑터 상태 갱신
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+
+        histories.clear();
+        cursor = sqLiteDatabase.rawQuery(sqliteHelper.getSelectAllQuery(), null);
+
+        // db정보 가져옴
+        while(cursor.moveToNext()){
+            Log.d("db", String.format("%s, %d, %s", cursor.getString(1), cursor.getInt(0), cursor.getString(7)));
+            int id = cursor.getInt(0);
+            String category = cursor.getString(1);
+            float percent_carHorn = cursor.getFloat(2);
+            float percent_dogBark = cursor.getFloat(3);
+            float percent_siren = cursor.getFloat(4);
+            float percent_none = cursor.getFloat(5);
+            String soundString = cursor.getString(6);
+            float[] soundBuf;
+            try {
+                soundBuf = stringToArray(soundString);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String datetime = cursor.getString(7);
+            histories.add(0, new DetectedSound(id, category, percent_carHorn, percent_dogBark, percent_siren, percent_none, soundString, soundBuf, datetime));
+        }
+        // 상태 갱신
+        adapter.notifyDataSetChanged();
     }
 
     // 히스토리 클래스
@@ -160,6 +194,7 @@ public class HistoryIdxActivity extends AppCompatActivity {
 
             return view;
         }
+
     }
 
 

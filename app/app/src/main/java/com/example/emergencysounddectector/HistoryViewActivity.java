@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -12,11 +14,15 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.emergencysounddectector.SQLite.SQLiteHelper;
+
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class HistoryViewActivity extends AppCompatActivity {
 
@@ -43,6 +49,9 @@ public class HistoryViewActivity extends AppCompatActivity {
 
     // HTTP connection
     HttpCommunication httpCommunication;
+
+    SQLiteHelper sqliteHelper;
+    SQLiteDatabase sqLiteDatabase;
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -76,13 +85,17 @@ public class HistoryViewActivity extends AppCompatActivity {
         customGraphView.invalidateSoundBuffer(detectedSound.sound);
         customGraphView.invalidate();
 
+        // SQLite
+        this.sqliteHelper = new SQLiteHelper(this);
+        this.sqLiteDatabase = sqliteHelper.getWritableDatabase();
+
         // Play btn action
         button_play.setOnClickListener(v -> {
             final int TEST_CONF = AudioFormat.CHANNEL_OUT_MONO;
             final int TEST_FORMAT = AudioFormat.ENCODING_PCM_FLOAT; // float: 32bit
             final int TEST_MODE = AudioTrack.MODE_STATIC;
             final int TEST_STREAM_TYPE = AudioManager.STREAM_MUSIC;
-            audioTrack = new AudioTrack(TEST_STREAM_TYPE, 22050, TEST_CONF, TEST_FORMAT, 22050*4, TEST_MODE);
+            audioTrack = new AudioTrack(TEST_STREAM_TYPE, 22050, TEST_CONF, TEST_FORMAT, 22050 * 4, TEST_MODE);
             audioTrack.write(detectedSound.sound, 0, 22050, AudioTrack.WRITE_BLOCKING);
             audioTrack.play();
         });
@@ -94,16 +107,35 @@ public class HistoryViewActivity extends AppCompatActivity {
                 // HTTP connection
                 try {
                     httpCommunication = new HttpCommunication("http://220.69.208.121:4000/true-val/");
-                    String jsonString = httpCommunication.getJsonString(detectedSound.id, detectedSound.category, detectedSound.percent_carhorn, detectedSound.percent_dogbark, detectedSound.percent_siren, detectedSound.percent_none, detectedSound.soundString, detectedSound.datetime);
-                    String response = httpCommunication.sendPostMethod(jsonString);
-                    Log.d("aaaaa", response);
+                    JSONObject jsonObj = httpCommunication.getJsonObj(detectedSound.id, detectedSound.category, detectedSound.percent_carhorn, detectedSound.percent_dogbark, detectedSound.percent_siren, detectedSound.percent_none, detectedSound.soundString, detectedSound.datetime);
+                    String response = httpCommunication.sendPostMethod(jsonObj);
+                    sqLiteDatabase.execSQL(sqliteHelper.getDeleteQuery(detectedSound.id));
+                    finish();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }).start();
+        });
 
+        // No btn action
+        button_no.setOnClickListener(v -> {
+            // new Thread, 네트워크 통신은 main 쓰레드가 아닌 별도 쓰레드에서
+            new Thread(() -> {
+                // HTTP connection
+                try {
+                    httpCommunication = new HttpCommunication("http://220.69.208.121:4000/false-val/");
+                    JSONObject jsonObj = httpCommunication.getJsonObj(detectedSound.id, detectedSound.category, detectedSound.percent_carhorn, detectedSound.percent_dogbark, detectedSound.percent_siren, detectedSound.percent_none, detectedSound.soundString, detectedSound.datetime);
+                    String response = httpCommunication.sendPostMethod(jsonObj);
+                    sqLiteDatabase.execSQL(sqliteHelper.getDeleteQuery(detectedSound.id));
+                    finish();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         });
 
     }
