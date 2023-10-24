@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify  
+from flask import Flask, request, jsonify  , render_template
 import sqlite3
+from datetime import datetime
 
 # Create SQLite Table when first time
 try:
@@ -13,14 +14,26 @@ except:
 # Get Flask Obj
 app = Flask(__name__)
 
-
+###
 # True Value Rauting
+###
 @app.route('/true-val/', methods=['GET', 'POST'])
 def true_val():
     
     # GET, 데이터 인덱스 접근
     if request.method == 'GET':
-        return jsonify(400, {'state':'error', 'msg':'Body contents are not match with this server.'})
+        
+        # Get current time
+        now = str(datetime.now())[:16]
+        
+        
+        # Get DB
+        sqlite_connect = sqlite3.connect('sound.db')
+        sqlite_cursor = sqlite_connect.cursor()
+        sqlite_cursor.execute("SELECT id, category, datetime FROM true")
+        db_list = sqlite_cursor.fetchall()
+        
+        return render_template('index.html', time = now, dataList = db_list)
     
     # POST, 데이터 저장
     if request.method == 'POST':
@@ -54,7 +67,9 @@ def true_val():
         return jsonify({'state':'success', 'msg':"Successfully save data"}, 200)
     
     
+###
 # False Value Rauting
+###
 @app.route('/false-val/', methods=['GET', 'POST'])
 def false_val():
     
@@ -96,11 +111,8 @@ def false_val():
     
     
     
-
-
-
-
-
+###
 # Run Falsk Server
+###
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=4000)
