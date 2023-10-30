@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 # Load the Keras model from the H5 file
-keras_model = tf.keras.models.load_model('sound_detection.h5')
+keras_model = tf.keras.models.load_model('sound_detection.h5', compile=False)
 
 # Convert the Keras model to a TFLite model
 converter = tf.lite.TFLiteConverter.from_keras_model(keras_model)

@@ -16,12 +16,12 @@ for fileName in source_lst:
     if audioLen < sample_rate:
         audio1 = np.concatenate((audio, np.zeros(sample_rate-audioLen)))
         audio2 = np.concatenate((np.zeros(sample_rate-audioLen), audio))
-        soundfile.write(savePath+'000'+f'{saveIdx}.wav', audio1, sample_rate, format='WAV')
+        soundfile.write(savePath+'010'+f'{saveIdx}.wav', audio1, sample_rate, format='WAV')
         saveIdx += 1
-        soundfile.write(savePath+'000'+f'{saveIdx}.wav', audio2, sample_rate, format='WAV')
+        soundfile.write(savePath+'010'+f'{saveIdx}.wav', audio2, sample_rate, format='WAV')
         saveIdx += 1
         
     else:
         for i in range(0, audioLen, sample_rate):
-            soundfile.write(savePath+'000'+f'{saveIdx}.wav', audio[i:i+sample_rate], sample_rate, format='WAV')
+            soundfile.write(savePath+'010'+f'{saveIdx}.wav', audio[i:i+sample_rate], sample_rate, format='WAV')
             saveIdx += 1

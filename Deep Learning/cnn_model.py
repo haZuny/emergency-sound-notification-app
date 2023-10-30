@@ -13,10 +13,10 @@ X = []
 Y = []
 
 # 데이터 로드
-carHorn_data_size = 830
-dogBark_data_size = 1045
-siren_data_size = 1058
-other_data_size = 1136
+carHorn_data_size = 1078
+dogBark_data_size = 1088
+siren_data_size = 1172
+other_data_size = 1305
 
 # positive와 negative 순서 정의
 data_idx = []
@@ -43,6 +43,7 @@ for i in data_idx:
         #f, t, Zxx = sound_processing.wav_to_stft(shuffle_path+str(i-1)+'.wav')
         audio, sample_rate = librosa.load(shuffle_path+str(i-1)+'.wav')
         mfcc = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=64)
+        mel_sp = librosa.feature.melspectrogram(y=audio, sr=sample_rate)
     # 개짖는소리
     elif i < 3000:
         Y.append([0,1,0,0])
@@ -63,9 +64,10 @@ for i in data_idx:
         # wav 파일 읽어서 stft
         #f, t, Zxx = sound_processing.wav_to_stft(shuffle_path+str(carHorn_data_size - i -2)+'.wav')
         audio, sample_rate = librosa.load(shuffle_path+str(carHorn_data_size+dogBark_data_size+siren_data_size+i-4501)+'.wav')
-        mfcc = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=64)
+        mfcc = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=128, n_fft=)
     mfcc = np.resize(mfcc, (64,44,1))
     X.append(mfcc)
+    
         
     
 X = np.array(X)
@@ -97,12 +99,12 @@ model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.001), loss='categorical_cro
 #model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # 학습
-X_train = X[:3300]
-X_val = X[3300:]
-Y_train = Y[:3300]
-Y_val= Y[3300:]
+X_train = X[:3500]
+X_val = X[3500:]
+Y_train = Y[:3500]
+Y_val= Y[3500:]
 
-early_stopping = EarlyStopping(patience=4)
+early_stopping = EarlyStopping(patience=5)
 trained = model.fit(X_train, Y_train, epochs=500, validation_data=(X_val, Y_val), callbacks = [early_stopping])
 
 
@@ -133,6 +135,6 @@ plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper left')
 plt.show()
 
-#model.summary()
+model.summary()
 
 

@@ -22,7 +22,8 @@
     </header>
 
     {% for id, category, datetime in dataList %}
-        <a href="{{id}}" style="color: black; text-decoration:none;" onmouseover="style='text-decoration:underline; color:black'" onmouseout="style='text-decoration:none; color:black;'"><div style="margin-bottom:70px; margin-left: 200px; font-size:30px;"><b>{{category}}</b> <spen style="font-size: 20px;"> - {{datetime}}</spen></div></a>
+        <a href="{{id}}" style="color: black; text-decoration:none;" onmouseover="style='text-decoration:underline; color:black'" onmouseout="style='text-decoration:none; color:black;'"><div style="margin-bottom:50px; margin-left: 200px; font-size:30px;"><b>{{category}}</b> <spen style="font-size: 20px;"> - {{datetime}}</spen></div></a>
+        <hr width=500px style="margin-left: 170px; margin-bottom: 50px;">
     {% endfor %}
     <div style="position: fixed; bottom: 20px; right: 20px;">순천향대학교 컴퓨터공학과 권하준</div>
 

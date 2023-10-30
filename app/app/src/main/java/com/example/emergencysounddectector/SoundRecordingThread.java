@@ -8,7 +8,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -49,7 +48,7 @@ public class SoundRecordingThread extends Thread {
 
     // temp
     int cnt = 0;
-    int tempSize = 10;
+    int tempSize = 5;
     int[] temp = new int[tempSize];
     int lastState = 3;
 
@@ -117,7 +116,7 @@ public class SoundRecordingThread extends Thread {
                         if (temp != i){state = false;}
                     }
                     // 알림
-                    if(state && i != 3 && i!=2 && lastState != i){
+                    if(state && i != 3 && lastState != i){
                         vibrate.vibrate(vibrationEffect);   // 진동
                         playNotiSound();    // 소리
                         lastState = i;

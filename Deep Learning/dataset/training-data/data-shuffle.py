@@ -1,9 +1,9 @@
 import os, shutil
 
-path_0 = './car_horn_cut/'
+path_0 = './car_horn_cut_임시/'
 list_0 = os.listdir(path_0)
 
-path_1 = './dog_bark_cut/'
+path_1 = './dog_bark_cut_임시/'
 list_1 = os.listdir(path_1)
 
 path_2 = './siren_cut/'
