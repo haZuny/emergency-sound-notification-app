@@ -16,13 +16,13 @@ public class SoundClassifier {
     private static JLibrosa jlibrosa = new JLibrosa();
     private static Interpreter interpreter = null;
 
-    private static float[][][][] input = new float[1][44][44][1];
+    private static float[][][][] input = new float[1][64][44][1];
     private static float[][] output = new float[1][4];
 
     // 예측
     public static float[] predict(float[] soundBuffer, int sampleRate) {
         // MFCC
-        float[][] mfcc = jlibrosa.generateMFCCFeatures(soundBuffer, sampleRate, 44);
+        float[][] mfcc = jlibrosa.generateMFCCFeatures(soundBuffer, sampleRate, 64);
         // input reshape (64, 44) -> (1, 64, 44, 1)
         for (int i = 0; i < mfcc.length; i++) {
             float[][] buf = new float[44][1];
