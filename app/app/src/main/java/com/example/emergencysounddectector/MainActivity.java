@@ -1,9 +1,5 @@
 package com.example.emergencysounddectector;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -22,10 +18,11 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.example.emergencysounddectector.SQLite.SQLiteHelper;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import com.example.emergencysounddectector.SQLite.SQLiteHelper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,10 +49,6 @@ public class MainActivity extends AppCompatActivity {
     public SoundRecordingThread audioRecordThread = null;
     // Audio Record State
     private boolean audioRecordingState = false;
-
-    // Timer (State Update)
-    Timer timer;
-    TimerTask timerTask_updatePercent;
 
     // Sound
     SoundPool soundPool;
@@ -133,24 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 // Generate AudioRecord Thread Obj
                 audioRecordThread = new SoundRecordingThread(this);
                 audioRecordThread.start();
-                // percent update timer
-//                timer = new Timer();
-//                timerTask_updatePercent = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                // 퍼센트 업데이트
-//                                text_carHornPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[0]));
-//                                text_dogBarkPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[1]));
-//                                text_sirenPercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[2]));
-//                                text_nonePercent.setText(String.format("%.2f%%", audioRecordThread.predictOutputBuf[3]));
-//                            }
-//                        });
-//                    }
-//                };
-//                timer.schedule(timerTask_updatePercent,0,100);
             }
             // Start -> Stop
             else{
