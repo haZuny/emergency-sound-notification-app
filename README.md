@@ -1,1 +1,15 @@
 # Emergency-sound-notification-app
+
+![슬라이드1](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/c34a4b09-3b59-4017-b460-080ef9d9bbd6)
+![슬라이드2](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/1a89e5cc-9f51-4e53-9c3d-5e010c575e54)
+![슬라이드3](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/08158cfc-cf80-410f-8771-55272af9febe)
+![슬라이드4](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/6d1438b4-97f4-40d8-a4a9-8fa267b94455)
+![슬라이드5](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/a2fd618f-2e16-4056-874a-7309c33803c2)
+![슬라이드6](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/a6ef59f8-2ef5-4c70-9361-9ce8a23c7525)
+![슬라이드7](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/9343b88a-f5f4-4c3c-8bcc-eff1ad48c467)
+![슬라이드8](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/2b8840ef-fda3-4492-b8cf-c38443877377)
+![슬라이드9](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/a67d708a-fb5b-47a8-9b0b-0ef358ae3ffc)
+![슬라이드10](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/4ce00e3b-adb6-4e65-a163-42856aa3e519)
+![슬라이드11](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/76993967-6ab3-4a3d-b1b7-f094e830de7f)
+![슬라이드12](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/07ec5691-c09a-4086-9f89-7f8b7020e1a0)
+![슬라이드13](https://github.com/haZuny/emergency-sound-notification-app/assets/64102831/24905dda-cb51-428e-a3d4-e45ec3716ffc)
